@@ -49,10 +49,11 @@ app.get('/', (req, res) => {
      }).then(response => console.log(response), err=> console.log(err)); */
 
 
-     axios.all([1, 2, 3, 4, 5].map(elem => axios.get(reqPage+'page='+`${elem}`))).then(axios.spread((...args)=> {
+     axios.all([1, 2, 6, 4, 5].map(elem => axios.get(reqPage+'page='+`${elem}`))).then(axios.spread((...args)=> {
          console.log('OK');
-         console.log(typeof args[0].data.results);
-
+         /* console.log(typeof args[0].data.results);
+         console.log(args[0].data)
+         console.log(args[0].data.results) */
          for(let i = 0; i < args.length; i++) {
              /* args[i].data.results.concat(args[i+1].data.results); */
 

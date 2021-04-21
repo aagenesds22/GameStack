@@ -8,6 +8,9 @@ GET_GENRES = 'GET_GENRES',
 FILTER_INVERSE_ALPHA = 'FILTER_INVERSE_ALPHA',
 FILTER_GENRE = 'FILTER_GENRE',
 FILTER_DATABASE = 'FILTER_DATABASE',
+FILTER_RATING = 'FILTER_RATING',
+RESET_FILTERS = 'RESET_FILTERS',
+FILTER_DECREASING_RATING = 'FILTER_DECREASING_RATING',
 SHOW_GAME_BY_ID_SERVER = 'SHOW_GAME_BY_ID_SERVER',
 SHOW_GAME_BY_ID = "SHOW_GAME_BY_ID";
 
@@ -56,10 +59,10 @@ export const querySearchContent = (input) => {
 
 export const showGameByIdServer = (input) => {
     return function (dispatch) {
-        return axios.get(`http://localhost:3001/videogame/${input}`)
+        return !input ? dispatch({type: "SHOW_GAME_BY_ID_SERVER", payload: 'reset'}) : axios.get(`http://localhost:3001/videogame/${input}`)
         .then(response => {
             dispatch({type: "SHOW_GAME_BY_ID_SERVER", payload: response})
-        })
+        }, err => {dispatch({type:"SHOW_GAME_BY_ID_SERVER", payload: "Not Found"})})
     }
 }
 
@@ -82,7 +85,27 @@ export const filterInverseAlpha = () => {
     }
 }
 
+export const filterIncreaseRating = () => {
+    return {
+        type: 'FILTER_RATING',
+    }
+}
+
+export const filterDecreasingRating = () => {
+    return {
+        type: 'FILTER_DECREASING_RATING',
+    }
+}
+
+export const resetFilters = (input) => {
+    return {
+        type: 'RESET_FILTERS',
+        payload: input,
+    }
+}
+
 export const filterGenre = (input) => {
+    console.log('test');
     return {
         type: 'FILTER_GENRE',
         payload: input,
@@ -113,5 +136,5 @@ export function getMovieDetail(id){
         .then(json => { */
 
 export {QUERY_CONTENT, SHOW_GAME_BY_ID, SHOW_GAME_BY_ID_SERVER, GET_GENRES,
-    QUERY_SEARCH, FILTER_ALPHA, FILTER_INVERSE_ALPHA, 
-    FILTER_GENRE, FILTER_DATABASE};
+        QUERY_SEARCH, FILTER_ALPHA, FILTER_INVERSE_ALPHA, FILTER_RATING,
+        RESET_FILTERS, FILTER_DECREASING_RATING, FILTER_GENRE, FILTER_DATABASE};

@@ -1,5 +1,9 @@
-/* import React, { useState } from 'react';
-import sectionsArray from './aboutSections.jsx';
+import React, { useState } from 'react';
+import {connect} from 'react-redux';
+import {bindActionCreators} from 'redux';
+import {PaginationAnimation} from '../StyledComponents/PaginationAnimation';
+import {loadPagination} from '../helpers/helperFunctions';
+/*  import sectionsArray from './aboutSections.jsx';
 
 
 export default function Any() {
@@ -33,9 +37,79 @@ export default function Any() {
         <button onClick={pageCount > 0 ? () => {setPageCount(prevPage => {return prevPage-=1});
       console.log(pageCount)} : null} id="prevBtn"><span>Previo</span></button>
            </div> */
-        <h1>{'pageCount+1'}/3{/*acá debería ir la longitud del array del store*/}</h1>
+        {/*acá debería ir la longitud del array del store</h1>*/}
 /*         </div>
         </div>
 
     );
 } */
+
+function Pagination(props) {
+
+
+  
+console.log(props);
+return (
+  <PaginationAnimation>
+    {loadPagination(props, !props.genreFiltered && 
+                !props.alphaFiltered && 
+                !props.inverseAlphaFiltered && 
+                !props.ratingFiltered && 
+                !props.ratingDecreasingFiltered ? props.videogames : props.orderedVideogames)}
+    {/* <div style={{
+      position: 'relative', 
+      display: 'inherit',
+      height: 'min-content',
+      justifyContent: 'space-between', 
+      width: '30%',
+      top: '50%',
+      margin: '0 auto'}}> */}
+
+      
+    {/* <button 
+      onClick={()=> props.pageSet(prevPage => {
+            return {
+
+                    prev: prevPage.prev-15,
+                    next: prevPage.prev,
+
+    }})} 
+
+      disabled={props.page.prev < 15}>
+              Prev
+    </button>
+    {[...props.videogames].slice(0, Math.ceil(props.videogames.length/15)).map((elem,index) => (
+    <button key={index} onClick={()=> props.pageSet({
+            prev: index*15,
+            next: (index+1)*15
+    })} disabled={props.page.prev == index*15}>{index+1}</button>
+    ))}
+    <button 
+      onClick={()=> props.pageSet(prevPage => {
+            return {
+
+                    prev: prevPage.next,
+                    next: prevPage.next+15,
+        }
+        })} 
+      disabled={props.page.next > props.videogames.length}>
+        Next
+    </button> */}
+        {/* </div> */}
+        </PaginationAnimation>
+    )
+}
+
+const mapStateToProps = (state) => {
+  return {
+    videogames: state.videogames,
+    orderedVideogames: state.orderedVideogames,
+    genreFiltered: state.genreFiltered,
+    alphaFiltered: state.alphaFiltered,
+    inverseAlphaFiltered: state.inverseAlphaFiltered,
+    ratingFiltered: state.ratingFiltered,
+    ratingDecreasingFiltered: state.ratingDecreasingFiltered,
+  }
+}
+
+export default connect(mapStateToProps, null)(Pagination);

@@ -2,6 +2,7 @@ const app = require('express')();
 const { default: axios } = require('axios');
 const {Videogame, Genre} = require('../db.js');
 const {v4: uuidv4} = require('uuid');
+const {API_KEY} = process.env;
 module.exports = app;
 
 app.get(`/:idVideoGame`, (req, res) => {
@@ -25,14 +26,18 @@ app.get(`/:idVideoGame`, (req, res) => {
 
       const apiFound = axios({
          method: "get",
-         url: `https://api.rawg.io/api/games/${req.params.idVideoGame}`
+         url: `https://api.rawg.io/api/games/${req.params.idVideoGame}?key=${API_KEY}`
       }).then(response => response.data);
-
+      console.log(apiFound);
       Promise.allSettled([dbFound, apiFound]).then(response => {
          
          for(let i = 0; i < response.length; i++) {
+            console.log(response[i].status);
             if(response[i].status === 'fulfilled') return res.status(200).send(response[i].value);
+                        
          }
+
+         return res.status(404).send("Not Found");
       }
 
          , error => res.send(error));

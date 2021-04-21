@@ -1,10 +1,22 @@
 import React, {useState, useEffect, useLayoutEffect, useRef} from 'react';
-import {queryContent, filterAlpha, filterInverseAlpha, filterGenre, getGenres, querySearchContent, showGameById} from '../actions/actions';
+import {queryContent, 
+       filterAlpha, 
+       filterInverseAlpha, 
+       filterIncreaseRating,
+       filterDecreasingRating,
+       filterGenre,
+       resetFilters,
+       getGenres, 
+       querySearchContent, 
+       showGameById} from '../actions/actions';
 import Pagination from './Pagination.jsx';
 import {connect} from 'react-redux';
 import {Link} from 'react-router-dom';
 import {bindActionCreators} from 'redux';
 import styled from 'styled-components';
+import SearchBar from './SearchBar';
+import GameGrid from './GameGrid';
+import NavBar from './NavBar.jsx';
 
 
 
@@ -37,172 +49,6 @@ import styled from 'styled-components';
           - 
 */
 
-const AnimatedCardGame = styled.div`
-    position: relative;
-    display: inherit;
-    flex-wrap: inherit;
-    bottom: -100px;
-    height: max-content;
-    width: min-content;
-    animation: appear 2.5s linear forwards;
-
-
-    @keyframes appear {
-           0% {bottom: -100px;}
-           100% {bottom: 0;}
-    }
-`
-
-
-{/*  */}
-const loadStandard = (props, state, pageSet, init = 0, stop = 16) => {
-
-
-           if(props.alphaFiltered && !props.searched) {
-              return (
-                     
-                     <div style={{width: 'max-content', height: '100%', display: 'inherit', flexWrap: 'inherit'}}>
-                            <div style={{width: '100%', height: 'min-content', display: 'flex', justifyContent:'flex-end'}}>
-                            <button onClick={() => {
-                     
-                     props.filterAlpha();
-                     /* !props.filtered && setState([...props.videogames]) */
-                     console.log('test');
-                     
-              }}>{!props.alphaFiltered ? 'A-Z' : 'Remove Filters'}</button>
-              <button onClick={() => {
-
-                     props.filterInverseAlpha();
-                     console.log('testInverse');
-              }}>{!props.inverseAlphaFiltered ? 'Z-A' : 'Remove Filters'}</button>
-              </div>
-                     {props.orderedVideogames.slice(state.prev, state.next).map((elem,index) => (
-              
-              <AnimatedCardGame key={index}>
-                     <div key={index}style={{width: 'min-content', height: 'max-content'}}>
-                            <div style={{width: '13em', height: '19.5em', display: 'flex', flexDirection: 'column', alignItems: 'center'}}>
-                            <Link onClick={(e) => {props.showGameById(elem)}} to={`/game/${elem.id}`} >
-                                
-                                <img style={{position: 'relative', width: '16.2em', objectFit: 'cover', objectPosition:' 20% 10%',height: '16.5em', transform: 'scale(0.8, 0.75)'}} src={`${elem['background_image']}`}/>
-                            <h5 style={{margin: '0 auto', width: 'max-content'}}>{elem.name}</h5>
-                            </Link>
-                            </div>
-                            </div>
-                            
-                            
-                     </AnimatedCardGame>
-                     
-                     
-                     ))}{
-                            <div style={{display: 'block', position: 'absolute'}}>
-                     <button onClick={()=> pageSet(prevPage => {
-                            return {
-
-                                   prev: prevPage.prev-15,
-                                   next: prevPage.prev,
-
-                     }})} disabled={state.prev < 15}>Prev</button>
-                     <button onClick={()=> pageSet(prevPage => {
-                            return {
-                                   prev: prevPage.next,
-                                   next: prevPage.next+15,
-                            }
-                     })} disabled={state.next > props.orderedVideogames.length}>Next</button>
-                     </div>
-                     }
-                     </div>
-                     
-              )
-              } if(!props.alphaFiltered && !props.searched)  {
-                     return (
-                            <div style={{width: '100%', height: '100vw', display: 'inherit', flexWrap: 'inherit'}}>
-                                   <div style={{width: '100%', height: 'min-content', display: 'flex', justifyContent:'flex-end'}}>
-                                   <button onClick={() => {
-                     
-                     props.filterAlpha();
-                     /* !props.filtered && setState([...props.videogames]) */
-                     console.log('test');
-                     
-              }}>{!props.alphaFiltered ? 'A-Z' : 'Remove Filters'}</button>
-              <button onClick={() => {
-
-                     props.filterInverseAlpha();
-                     console.log('testInverse');
-              }}>{!props.inverseAlphaFiltered ? 'Z-A' : 'Remove Filters'}</button>
-              </div>
-                            {props.videogames.slice(state.prev, state.next).map((elem,index) => (
-                     
-                            <div key={index}style={{width: 'min-content', height: 'min-content'}}>
-                                   
-                                       <div style={{width: '13em', height: '19.5em', display: 'flex', flexDirection: 'column', alignItems: 'center'}}>
-                                       <Link onClick={(e) => {props.showGameById(elem)}} to={`/game/${elem.id}`} >
-                                       <img style={{position: 'relative', width: '15em', objectFit: 'cover',height: '42.2vh', transform: 'scale(0.8, 0.75)'}} src={`${elem['background_image']}`}/>
-                                   <h5 style={{margin: '0 auto'}}>{elem.name}</h5>
-                                   </Link>
-                                   </div>
-                                   
-                                   
-                            </div>
-                            
-                            )
-                            )}{
-                                   <div style={{display: 'flex', position: 'relative'}}>
-                            <button style={{height: 'min-content'}} onClick={()=> pageSet(prevPage => {
-                                   return {
-       
-                                          prev: prevPage.prev-15,
-                                          next: prevPage.prev,
-       
-                            }})} disabled={state.prev < 15}>Prev</button>
-                            <button style={{height: 'min-content'}} onClick={()=> pageSet(prevPage => {
-                                   return {
-                                          prev: prevPage.next,
-                                          next: prevPage.next+15,
-                                   }
-                            })} disabled={state.next > props.videogames.length}>Next</button>
-                            </div>
-                            }
-                            
-                            </div>
-                            )
-              } if(props.searched) {
-                     return (
-                            <div style={{width: '100%', display: 'inherit', flexWrap: 'inherit'}}>
-                            {props.searchQuery.slice(state.prev, state.next).map((elem,index) => (
-                     
-                            <div key={index}style={{width: 'min-content', height: 'max-content'}}>
-                                   <Link onClick={(e) => {props.showGameById(elem)}} to={`/game/${elem.id}`} >
-                                       <div style={{width: '13em', height: '19.5em', display: 'flex', flexDirection: 'column', alignItems: 'center'}}>
-                                       <img style={{position: 'relative', width: '16.2em', objectFit: 'cover', objectPosition:' 20% 10%',height: '100%', transform: 'scale(0.8, 0.75)'}} src={`${elem['background_image']}`}/>
-                                   <h5 style={{margin: '0 auto'}}>{elem.name}</h5>
-                                   </div>
-                                   </Link>
-                                   
-                            </div>
-                            
-                            )
-                            )}{
-                                   <div style={{display: 'block', position: 'absolute'}}>
-                            <button style={{height: 'min-content'}} onClick={()=> pageSet(prevPage => {
-                                   return {
-       
-                                          prev: prevPage.prev-15,
-                                          next: prevPage.prev,
-       
-                            }})} disabled={state.prev < 15}>Prev</button>
-                            <button style={{height: 'min-content'}} onClick={()=> pageSet(prevPage => {
-                                   return {
-                                          prev: prevPage.next,
-                                          next: prevPage.next+15,
-                                   }
-                            })} disabled={state.next > props.searchQuery.length}>Next</button>
-                            </div>
-                            }
-                            
-                            </div>
-                            )
-              }
-       }
 
 
 /* function RandomHook(pass) {
@@ -241,9 +87,7 @@ const loadStandard = (props, state, pageSet, init = 0, stop = 16) => {
 
 function VideogamesGrid(props) {
 
-       const [value, setValue] = useState({
-              name: '',
-       })
+       
 
        const [page, setPage] = useState({
               prev: 0,
@@ -256,36 +100,26 @@ function VideogamesGrid(props) {
               
            
               props.isEmpty && props.queryContent();
-              props.genres.length < 1 && props.getGenres();  
+              props.genres.length < 1 && props.getGenres();
+              
               return;
-        }, []) 
+        }, [])
+        
+        /* useEffect(() => {
 
-       const handleChange = (e) => {
-
-              e.preventDefault();
-              setValue(prevState => {
-
-
-                     return {
-
-                          ...prevState,
-                          [e.target.name]: e.target.value,
-                     }
-              })
-       }
+              setTimeout(() => {testRef.current.style.overflowY = 'scroll'}, 4000);
+              return;
+        }, [props.videogames, props.orderedVideogames])
+ */
+       
        
        
        /* }, []) */
 
        return (
-              <div style={{width: '100vw', margin: '0 auto'}}>
-                     <button onClick={() => 
-                     props.queryContent()
-                     
-                     
-              }>Click</button>
-
-
+              <div style={{
+                     width: '100vw', 
+                     margin: '0 auto'}}>
               
               {/* <button onClick={() => {
 
@@ -293,33 +127,37 @@ function VideogamesGrid(props) {
               }}></button> */}
 
               {/* <input list="genres" autoComplete="off" placeholder="Filter by genre" /> */}
-              <div>
+              <NavBar 
+                     paginationState={page} 
+                     paginationComponent={true} 
+                     searchBar={true}
+                     paginationFunction={(elem)=> setPage(elem)}/>
+
+              {/* <div>
                      <span>Filter by Genre:</span>
-              <select name="genres" onChange={(e)=> filterGenre(e.target.value)}>
+              <select name="genres" onChange={(e)=> props.filterGenre(e.target.value)}>
                      {props.genres.map((elem,index) => (<option key={index} value={elem.name}>
                             {elem.name}
                      </option>))}
               </select>
-              </div>
+              </div> */}
 
 
-              <form onSubmit={(e) => {
+              {/* <SearchBar /> */}
+              <div ref={testRef} style={{
+
+                     width: '100%', 
+                     height: '35em', 
+                     display: 'flex', 
+                     flexWrap: 'wrap', 
+                     justifyContent: 'space-evenly', 
+                     margin: '0 auto', 
+                     overflowY: 'auto'}} >
                      
-                     e.preventDefault();
-                     props.querySearchContent(value.name);
-                     setValue(prevVal => {
-                            return {
-                                   ...prevVal,
-                                   name: '',
-                            }
-                     })
-              }}>
-              <input type="text" name="name" onChange={handleChange} disabled={props.searched} value={value.name} />
-              <input type="submit" disabled={value.name < 1 && !props.searched} value={!props.searched ? 'Search' : 'Reset search'}/>
-              </form>
-              <div style={{width: '70%', height: '100vw', display: 'flex', flexWrap: 'wrap', justifyContent: 'space-between', margin: '0 auto'}} >
-                     
-                     {loadStandard(props, page, setPage)}
+
+                     <GameGrid page={page}/* props={{props}} page={page} pageSet={(elem)=>setPage(elem)} *//>
+                     {/* {loadStandard(props, page, setPage)} */}
+
                      </div>
                      
               </div>
@@ -337,6 +175,9 @@ const mapStateToProps = (state) => {
               genres: state.genres,
               inverseAlphaFiltered: state.inverseAlphaFiltered,
               alphaFiltered: state.alphaFiltered,
+              genreFiltered: state.genreFiltered,
+              ratingFiltered: state.ratingFiltered,
+              ratingDecreasingFiltered: state.ratingDecreasingFiltered,
               isEmpty: state.isEmpty,
               searched: state.searched,
        }
@@ -344,7 +185,7 @@ const mapStateToProps = (state) => {
 }
 
 const mapDispatchToProps = (dispatch) => {
-       return bindActionCreators({queryContent, getGenres, querySearchContent, filterAlpha, filterInverseAlpha, filterGenre, showGameById}, dispatch)
+       return bindActionCreators({queryContent, getGenres, querySearchContent, filterAlpha, filterInverseAlpha, filterIncreaseRating, filterDecreasingRating, filterGenre, resetFilters, showGameById}, dispatch)
 }
 
 

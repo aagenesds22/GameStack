@@ -8,20 +8,51 @@ import styled from 'styled-components';
 
 
 const MainBck = styled.div`
-    
+display: flex;
     width: 100%;
-    height: 100vh;
+    height: 100%;
     background-color: rgb(0, 0, 25, 0.8);
 
-    h1 {
-        position: absolute;
+
+
+
+    .link{
+        text-decoration: none;
+        width: min-content;
+        margin: 0 auto;
+    }
+    .container {
+        width: 17vw;
+        height: 19vh;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-around;
+        margin: 0 auto;
+        background-color: rgb(255, 255, 255, 0.6);
+    
+}
+    h1{
+        
+        
         bottom: -100px;
         margin: 0 auto;
-        right: 0;
-        left: 0;
         width: min-content;
         animation: move 1.2s linear forwards;
         opacity: 0;
+    }
+    .hoverButton {
+        width: min-content;
+    }
+    .hoverButton:hover {
+        display: block;
+        transform: perspective(100px) translateZ(2.5em);
+        transition-duration: 0.2s;
+    }
+    h1:hover {
+        
+        transform: perspective(500px) translateZ(1em);
+        transition-duration: 0.2s;
+        
     }
 
     @keyframes move {
@@ -64,20 +95,20 @@ function Home(props) {
 
   /*   const [offsetY, setOffsetY] = useState(0);
     const handleScroll = () => setOffsetY(window.pageYOffset);
-
-    useEffect(() => {
-        window.addEventListener('scroll', handleScroll)
+*/
+   /*  useEffect(() => {
+        props.isEmpty && props.queryContent();
         return;
-    }, []) */
+    }, [])  */
 
     return (
         <MainBck>
-        
-        
+            <div className="container">
             <h1>Home</h1>
-            <Link to='/home'>
-              <button>Videogames</button>
+            <Link to='/home' className="link">
+              <span className="hoverButton">Videogames</span>
             </Link>
+            </div>
         </MainBck>
     
     )
@@ -90,7 +121,8 @@ const mapStateToProps = (state) => {
            videogames: state.videogames,
            searchQuery: state.searchVideogames,
            orderedVideogames: state.orderedVideogames,
-           filtered: state.filtered
+           filtered: state.filtered,
+           isEmpty: state.isEmpty,
     }
 
 }

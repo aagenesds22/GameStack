@@ -22,12 +22,19 @@ const getTheGame = async (props) => {
 const loadGameStandard = (props) => {
 
     let returnBlock;
-    return props.idGame.hasOwnProperty('headers') ? returnBlock = (
-        <div style={{width: '100%', height: '85vw'}}>
+    return props.idGame === 'empty' ? (
+<div style={{width: '100vw', height: '100vh', backgroundColor: 'black'}}>
+    <h1 style={{margin: '0 auto', color: 'white'}}>Unable to find game ID.</h1>
+
+</div>
+
+
+    ) : props.idGame.hasOwnProperty('headers') ? returnBlock = (
+        <div style={{width: '100%', height: 'max-content', display: 'flex', flexDirection: 'column'}}>
             <h1>{props.idGame.data.name}</h1>
             <div style={{width: '100%', height: '100%'}}>
                 
-                <img style={{width: '100%', objectFit: 'cover'}} src={`${props.idGame.data['background_image']}`} />
+                <img style={{width: '50%', objectFit: 'cover'}} src={`${props.idGame.data['background_image']}`} />
                 <h5>{props.idGame.data.description}</h5>
                 
             </div>
@@ -60,12 +67,13 @@ function Videogame(props) {
 
     
     let anythingFound; 
-    
+    console.log('re-render1')
+    console.log('re-render2')
     
     useEffect(() => {
               
         props.isGameIdEmpty && props.showGameByIdServer(props.match.params.id);
-        return;
+        return ()=>props.showGameByIdServer();
   }, []) 
 
 /* useLayoutEffect(() => {
@@ -85,7 +93,7 @@ function Videogame(props) {
     
 
     return (
-        <div style={{width: '40vw', height: 'max-content', margin: '0 auto'}}>
+        <div style={{width: '70%', height: 'max-content', margin: '0 auto'}}>
 
         {loadGameStandard(props)}
 
@@ -96,7 +104,6 @@ function Videogame(props) {
 const mapStateToProps = (state) => {
     return {
         videogames: state.videogames,
-        searchQuery: state.searchVideogames,
         idGame: state.idGame,
         isGameIdEmpty: state.isGameIdEmpty,
     }
