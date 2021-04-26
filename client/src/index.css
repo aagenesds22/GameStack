@@ -1,12 +1,17 @@
 body {
-  height: 100vh;
-  margin: 0 auto;
+  height: max-content;
+  margin: 0;
+  width: 100%;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
     'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  overflow: hidden;
+  overflow: 'scroll';
+  
+  transition-timing-function: cubic-bezier(0.165, 0.84, 0.44, 1);
+/* transi */
+  
 }
 
 code {

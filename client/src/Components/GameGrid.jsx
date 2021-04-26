@@ -1,4 +1,4 @@
-import React, {useLayoutEffect} from 'react';
+import React, {useEffect, useLayoutEffect} from 'react';
 import {Link} from 'react-router-dom';
 import {AnimatedCardGame} from '../StyledComponents/AnimatedCardGame';
 import {bindActionCreators} from 'redux';
@@ -26,7 +26,7 @@ function GameGrid(props) {
     
 console.log('GameGrid',props);
 
-useLayoutEffect(() => {
+useEffect(() => {
               
            
     props.isEmpty && props.queryContent();
@@ -36,38 +36,9 @@ useLayoutEffect(() => {
 }, [])
 
     return (
-        <div style={{width: '100%', display: 'inherit', flexDirection: 'column'}}>
-    <div style={{
-        marginBottom: '2vw',
-    }}>
-
-        <select name="filter "onChange={(e)=> {
-
-        const objAction = {
-               'None': ()=>{
-                   props.resetFilters();
-                   props.filterGenre(e.target.value);
-                return;},
-               'A-Z': ()=>props.filterAlpha(),
-               'Z-A': ()=>props.filterInverseAlpha(),
-               'Rating increasing': ()=> props.filterIncreaseRating(e.target.value),
-               'Rating decreasing': ()=> props.filterDecreasingRating(e.target.value)
-        }
-
-        objAction[e.target.value]();
-        return;
-        
-        }}>
-
-        {['None', 'A-Z', 'Z-A', 'Rating increasing', 'Rating decreasing'].map(elem => (
-
-            <option value={elem}>{elem}</option>
-
-        ))}
-            </select>
-
-        </div>
-        <div style={{display: 'flex', flexWrap: 'wrap', justifyContent: 'space-around'}}>
+        <div style={{width: '100%', display: 'inherit', flexDirection: 'column', backgroundColor: 'rgb(0,0,25, 0.85)', paddingBottom: '4em'}}>
+  
+        <div style={{display: 'flex', flexWrap: 'wrap', justifyContent: 'space-around', backdropFilter: 'blur(2px)'}}>
             {loadStandard(props, !props.genreFiltered && 
                 !props.alphaFiltered && 
                 !props.inverseAlphaFiltered && 

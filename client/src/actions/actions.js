@@ -2,6 +2,7 @@ import axios from 'axios';
 
 
 const QUERY_CONTENT = 'QUERY_CONTENT', 
+QUERY_RESET_CONTENT = 'QUERY_RESET_CONTENT',
 QUERY_SEARCH = 'QUERY_SEARCH',
 FILTER_ALPHA = 'FILTER_ALPHA',
 GET_GENRES = 'GET_GENRES',
@@ -55,6 +56,13 @@ export const querySearchContent = (input) => {
         dispatch({type: "QUERY_SEARCH", payload: response})
     });
 }
+}
+
+export const queryResetContent = () => {
+
+    return {
+        type: "QUERY_RESET_CONTENT",
+    }
 }
 
 export const showGameByIdServer = (input) => {
@@ -135,6 +143,6 @@ export function getMovieDetail(id){
         .then(response => response.json())
         .then(json => { */
 
-export {QUERY_CONTENT, SHOW_GAME_BY_ID, SHOW_GAME_BY_ID_SERVER, GET_GENRES,
+export {QUERY_CONTENT, QUERY_RESET_CONTENT, SHOW_GAME_BY_ID, SHOW_GAME_BY_ID_SERVER, GET_GENRES,
         QUERY_SEARCH, FILTER_ALPHA, FILTER_INVERSE_ALPHA, FILTER_RATING,
         RESET_FILTERS, FILTER_DECREASING_RATING, FILTER_GENRE, FILTER_DATABASE};

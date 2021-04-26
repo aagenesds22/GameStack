@@ -1,4 +1,5 @@
 import {QUERY_CONTENT, 
+    QUERY_RESET_CONTENT,
     QUERY_SEARCH, 
     SHOW_GAME_BY_ID, 
     GET_GENRES, 
@@ -47,14 +48,29 @@ const rootReducer = (state = initialState, action) => {
         case QUERY_SEARCH: 
             return {
                 ...state,
-                videogames:action.payload === 'reset' ? [...''] : action.payload.data,
-                searched: action.payload !== 'reset',
+                videogames: action.payload.data,
+                searched: true,
                 alphaFiltered: false,
                 inverseAlphaFiltered: false,
                 ratingFiltered: false,
                 ratingDecreasingFiltered: false,
                 genreFiltered: false,
                 currentGenre: '',
+                isEmpty: false,
+            };
+        case QUERY_RESET_CONTENT:
+            return {
+                ...state,
+                videogames: [...''],
+                searched: false,
+                isEmpty: true,
+                alphaFiltered: false,
+                inverseAlphaFiltered: false,
+                ratingFiltered: false,
+                ratingDecreasingFiltered: false,
+                genreFiltered: false,
+                currentGenre: '',
+
             } /* : state.genreFiltered ? {
                 ...state,
                 orderedVideogames: action.payload.data.filter(elem => {

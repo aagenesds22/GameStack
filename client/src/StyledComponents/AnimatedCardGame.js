@@ -5,11 +5,12 @@ export const AnimatedCardGame = styled.div`
     position: relative;
     display: inherit;
     flex-wrap: inherit;
+    background-color: transparent;
+    height: 51.2vh;
+    width: 24em;
     
-    height: 36.2vh;
-    width: 25vw;
-    
-    box-shadow: 12px 8px 18px 1px black;
+    box-shadow: 3px 8px 18px 1px white;
+    margin-top: 3em;
     margin-bottom: 3em;
 
     .link {
@@ -17,6 +18,9 @@ export const AnimatedCardGame = styled.div`
        height: 100%;
        display: flex;
        flex-direction: column;
+       justify-content: center;
+       opacity: 0;
+       animation: smoothApp 0.8s ease-in forwards 0.2s;
     }
 
     .link img {
@@ -25,45 +29,68 @@ export const AnimatedCardGame = styled.div`
            width: 100%;
            object-fit: cover;
            image-rendering: crisp-edges;
-           transform: scale(0.8, 0.75);
-
-
-
-    }
-
-
-    img:hover {
+           transform: scale(1, 0.95);
            
-       box-shadow: -6px 1px 15px 52px rgb(115, 155, 255, 0.4);
+           
     }
+
+    .link h5 {
+           position: absolute;
+           display: block;
+           top: 0;
+           background-color: rgb(0,0,0,0.86);
+           border-bottom: 2px solid yellow;
+           box-shadow: 0px 2px 2px 0.5px black;
+           width: 100%;
+           left: 50%;
+           font-family: 'JetBrains Mono';
+           font-size: 100%;
+           transform: translate3d(-50%, 0, 0);
+           color: white;
+           text-decoration: none;
+           margin-top: 0;
+           margin-bottom: 5px;
+    }
+
+
+   
 
 
     &:hover {
            z-index: 3;
            position: relative;
-           background-color: rgb(0,0,0, 0.3);
+           background-color: rgb(12,0,0, 1);
+           transform: perspective(400px) translateZ(45px);
+           transition-duration: 0.25s;
+           transition-timing-function: cubic-bezier(0.165, 0.84, 0.44, 1);
+           animation-play-state: paused;
+           img {
+              
+              box-shadow: 0px 1px 25px 12px yellow;
+           }
+           
+           
+           
            
     }
 
-    @keyframes appear {
-           0% {bottom: -1000vh; display: none;}
-           60% {transform: skew(0deg, 165deg);}
-           62% {transform: skew(0deg, 170deg);}
-           64% {transform: skew(0deg, 170deg); opacity: 1;}
-           70% {transform: skew(0deg, 170deg); opacity: 0.2;}
-           78% {transform: skew(0deg, 140deg); opacity: 0;}
-           89% { transform: skew(0deg, -70deg); opacity: 0;}
-           90% {transform: skew(0deg, -135deg); opacity: 0;}
-           91% {transform: skew(0deg, -150deg); opacity: 0; display: flex;}
-           94% {opacity: 0.3;}
-           95% {opacity: 0.5;}
-           99% {opacity: 0.6;}
-           100% {bottom: 0; transform: skew(0, -176deg); opacity: 1; display: flex;}
+    @media (max-width: 500px) {
+           width: 90%;
+           margin-bottom: 12em;
     }
 
-    @keyframes floating {
-           0% {top: 0px;}
-           100% {top: 15px;}
+    @keyframes smoothApp {
+           from {opacity: 0;}
+           to {opacity: 1;}
+    }
+
+
+    @keyframes slideImg {
+       0% {
+              transform: scale(0.8, 0.75);
+       }
+       100% {
+              transform: scale(0.9, 0.85)}
     }
 
 

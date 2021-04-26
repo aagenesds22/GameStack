@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
-import {PaginationAnimation} from '../StyledComponents/PaginationAnimation';
+import {PaginationLayout} from '../StyledComponents/PaginationLayout';
 import {loadPagination} from '../helpers/helperFunctions';
 /*  import sectionsArray from './aboutSections.jsx';
 
@@ -50,7 +50,7 @@ function Pagination(props) {
   
 console.log(props);
 return (
-  <PaginationAnimation>
+  <>
     {loadPagination(props, !props.genreFiltered && 
                 !props.alphaFiltered && 
                 !props.inverseAlphaFiltered && 
@@ -96,7 +96,7 @@ return (
         Next
     </button> */}
         {/* </div> */}
-        </PaginationAnimation>
+        </>
     )
 }
 

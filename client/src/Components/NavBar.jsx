@@ -1,11 +1,15 @@
 import React, {useRef} from 'react';
 import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
-import {filterGenre} from '../actions/actions';
+import {filterGenre, resetFilters, filterAlpha, filterInverseAlpha, filterDecreasingRating, filterIncreaseRating} from '../actions/actions';
 import SearchBar from './SearchBar';
 import {NavigationBar} from '../StyledComponents/NavBar';
 import Pagination from './Pagination';
 import {NavLink} from 'react-router-dom';
+import {ReactComponent as Stars} from '../star_prototype_Webpage2.svg';
+import {StarLogo} from '../StyledComponents/LogoNavBar';
+
+
 
 function NavBar (props) {
 
@@ -13,34 +17,20 @@ function NavBar (props) {
     return (
         <NavigationBar>
 
-         <div style={{
-             width: 'max-content',
-             height: 'min-content'
-         }}>
-                     <span>Filter by Genre:</span>
-              <select name="genres" onChange={(e)=> props.filterGenre(e.target.value)}>
-                     {['None',...props.genres].map((elem,index) => !elem.name ? (
-                     
-                     <option 
-                     key={index} 
-                     value={elem} 
-                     selected={!props.genreFiltered && "selected"}>
+          {/* path="/" component={NavBar}}  <--- MOVER PAGINATION Y SEARCH BAR FUERA DE LA NAVBAR */}
+              <StarLogo>
+        <h3>GameStack</h3>
+        <div className="tripleStar">
+            <Stars />
+            <Stars />
+            <Stars />
+        </div>
 
-                         {elem}
-                     </option>) : 
-                     
-                     (<option 
-                     key={index} 
-                     value={elem.name}>
-
-                            {elem.name}
-
-                     </option>))}
-              </select>
-              </div>
-              {props.paginationComponent && <Pagination page={props.paginationState} pageSet={props.paginationFunction}/>}
+        </StarLogo>
+        
+              
               {props.searchBar && <SearchBar />}
-              <div style={{width: '30%', height: 'min-content'}}>
+              <div style={{width: '30%', height: 'min-content', width: '20%'}}>
                   <ul style={{display: 'flex', listStyleType:'none', padding: '0', height: 'inherit'}}>
                   <NavLink to='/home' style={{textDecoration: 'none', color: 'white'}}>
                   <li>
@@ -84,7 +74,7 @@ const mapStateToProps = (state) => {
 }
 
 const mapDispatchToProps = (dispatch) => {
-    return bindActionCreators({filterGenre}, dispatch);
+    return bindActionCreators({filterGenre, resetFilters, filterAlpha, filterInverseAlpha, filterIncreaseRating, filterDecreasingRating}, dispatch);
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(NavBar);

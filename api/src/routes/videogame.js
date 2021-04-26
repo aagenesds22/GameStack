@@ -61,23 +61,33 @@ app.get(`/:idVideoGame`, (req, res) => {
 
 })
 
-app.post(`/`, async (req, res) => {
+app.post(`/`, (req, res) => {
 
    const uuid = uuidv4();
    const {name, description, genres, releaseDate, rating, platforms} = req.body;
 
 
-  const added = await Videogame.create({
+  /* const added = await Videogame.create({
       id: uuid,
       name,
       description, 
       releaseDate,
       rating,
       platforms,
-   }, {
-   ignoreDuplicates: true})
+   }) */
+// verificar que ya no exista
+   if(name.includes('_')) return res.sendStatus(400);
+   Videogame.create({
+      id: uuid,
+      name,
+      picture: 'https://img3.goodfon.com/wallpaper/nbig/1/16/ps4-xbox-gempad.jpg',
+      description, 
+      releaseDate,
+      rating,
+      platforms,
+   }).then(resp => resp.addGenre(genres).then(resp=> res.send(resp), err=> res.status(404).send(err))) 
 
-   added.addGenre([...genres]).then(resp=> res.send(resp), err=> res.status(404).send(err));
+   /* added.addGenre([...genres]).then(resp=> res.send(resp), err=> res.status(404).send(err)); */
 
 /*    const genreFound = await Genre.findAll({
       where: {

@@ -1,8 +1,8 @@
 import React, {useState} from 'react';
 import { connect } from 'react-redux';
 import {bindActionCreators} from 'redux';
-import {queryContent, querySearchContent, showGameById} from '../actions/actions';
-
+import {queryContent, querySearchContent, showGameById, queryResetContent} from '../actions/actions';
+import {BarStyled} from '../StyledComponents/FilterBar';
 
 
 
@@ -31,8 +31,11 @@ function Searcher(props) {
 }
 
 
-    return (<form onSubmit={!props.searched ? (e) => {
-                     
+    return (
+        <BarStyled>
+            
+        <form className="formSearching" onSubmit={!props.searched ? (e) => {
+                 
         e.preventDefault();
         props.querySearchContent(value.name);
         setValue(prevVal => {
@@ -43,13 +46,14 @@ function Searcher(props) {
         })
  } : (e) => {
      e.preventDefault();
-     props.querySearchContent();
+     props.queryResetContent();
      props.queryContent();
  }} >
 
  <input type="text" name="name" onChange={handleChange} disabled={props.searched} value={value.name} />
- <input type="submit" disabled={value.name < 1 && !props.searched} value={!props.searched ? 'Search' : 'Reset search'}/>
+ <input type="submit" className="applyButton" disabled={value.name < 1 && !props.searched} value={!props.searched ? 'Search' : 'Reset search'}/>
  </form>
+ </BarStyled>
  )
 }
 
@@ -58,7 +62,6 @@ const mapStateToProps = (state) => {
 
     return {
            videogames: state.videogames,
-           searchQuery: state.searchVideogames,
            orderedVideogames: state.orderedVideogames,
            genres: state.genres,
            inverseAlphaFiltered: state.inverseAlphaFiltered,
@@ -71,7 +74,7 @@ const mapStateToProps = (state) => {
 }
 
 const mapDispatchToProps = (dispatch) => {
-    return bindActionCreators({queryContent, querySearchContent, showGameById}, dispatch)
+    return bindActionCreators({queryContent, queryResetContent, querySearchContent, showGameById}, dispatch)
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(Searcher);

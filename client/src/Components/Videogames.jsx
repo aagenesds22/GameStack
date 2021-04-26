@@ -17,6 +17,11 @@ import styled from 'styled-components';
 import SearchBar from './SearchBar';
 import GameGrid from './GameGrid';
 import NavBar from './NavBar.jsx';
+import JetBrains from '../assets/fonts/jetbrains';
+import {Footer} from '../StyledComponents/Footer';
+import FilterBar from './FilterBar';
+import FilterGenreBar from './FilterGenreBar';
+import {ReactComponent as SpinnerSVG} from '../Spinner-1.3s-384px.svg';
 
 
 
@@ -85,6 +90,20 @@ import NavBar from './NavBar.jsx';
 }
  */
 
+function MenuBars({page, setPage}) {
+
+       return (
+              <div style={{display: 'flex', justifyContent: 'space-between'}}>
+                     
+                     <p>test</p>
+              </div>
+       )
+}
+
+
+
+
+
 function VideogamesGrid(props) {
 
        
@@ -93,6 +112,8 @@ function VideogamesGrid(props) {
               prev: 0,
               next: 15,
        })
+
+       const [width, setWidth] = useState(window.innerWidth);
 
        const testRef = useRef();
 
@@ -104,6 +125,26 @@ function VideogamesGrid(props) {
               
               return;
         }, [])
+
+        useEffect(() => {
+               setPage({
+                      prev: 0,
+                      next: 15,
+               })
+        }, [props.searched])
+
+        useEffect(() => {
+              window.addEventListener('resize', changeWidth);
+        
+              return () => window.removeEventListener('resize', changeWidth)
+        }, [])
+
+        const changeWidth = () => {
+               setWidth(window.innerWidth);
+               return;
+        }
+
+
         
         /* useEffect(() => {
 
@@ -111,15 +152,17 @@ function VideogamesGrid(props) {
               return;
         }, [props.videogames, props.orderedVideogames])
  */
-       
+
        
        
        /* }, []) */
 
        return (
               <div style={{
-                     width: '100vw', 
-                     margin: '0 auto'}}>
+                     width: 'inherit', 
+                     margin: '0 auto',
+                     height: 'max-content',
+                     backgroundColor: 'rgb(0,0,0, 0.9)'}}>
               
               {/* <button onClick={() => {
 
@@ -144,22 +187,46 @@ function VideogamesGrid(props) {
 
 
               {/* <SearchBar /> */}
-              <div ref={testRef} style={{
+              {props.isEmpty ? <div style={{height: '100vh'}}><SpinnerSVG style={{backgroundColor: 'transparent'}} /></div> : 
+              
+              (<div ref={testRef} style={{
 
-                     width: '100%', 
-                     height: '35em', 
+                     width: '100%',
+                     minHeight: '100vh', 
+                     height: '100%', 
                      display: 'flex', 
                      flexWrap: 'wrap', 
                      justifyContent: 'space-evenly', 
                      margin: '0 auto', 
-                     overflowY: 'auto'}} >
+                     overflowY: 'auto',
+                     overflowX: 'hidden'}} >
+
                      
-
-                     <GameGrid page={page}/* props={{props}} page={page} pageSet={(elem)=>setPage(elem)} *//>
-                     {/* {loadStandard(props, page, setPage)} */}
-
+                     {width > 800 ? ( 
+                            
+                            <div style={{width:'100%', display: 'flex', flexDirection: 'column'}}>
+                            
+                            <div style={{
+                            display: 'flex',
+                            alignItems: 'center',
+                            width: '100%',
+                            height: '1.6em',
+                            justifyContent: 'space-evenly'
+                     }}>
+                     
+                     <FilterGenreBar />
+                     
+                     <FilterBar />
                      </div>
+                            {/* ADD SPINNER */}
                      
+                     <GameGrid page={page}/>
+                     <Pagination page={page} pageSet={setPage}/>
+                     </div>) : <MenuBars page={page} setPage={setPage}/>}
+                     </div>)}
+                     
+                     
+                     <Footer />
               </div>
                      
        );

@@ -24,7 +24,9 @@ app.get('/', (req, res) => {
             method: 'get'
             
         }).then(resp => {
+            
             parsedArray = [...resp.data.results]
+
             return Videogame.findAll({
                 where: {
                     name:{
@@ -49,7 +51,7 @@ app.get('/', (req, res) => {
      }).then(response => console.log(response), err=> console.log(err)); */
 
 
-     axios.all([1, 2, 6, 4, 5].map(elem => axios.get(reqPage+'page='+`${elem}`))).then(axios.spread((...args)=> {
+     axios.all([1, 2, 6, 4, 5, 7, 9, 8].map(elem => axios.get(reqPage+'page='+`${elem}`))).then(axios.spread((...args)=> {
          console.log('OK');
          /* console.log(typeof args[0].data.results);
          console.log(args[0].data)
@@ -63,10 +65,13 @@ app.get('/', (req, res) => {
         
      })).then(()=> {
 
-        Videogame.findAll().then(resp => {
+        Videogame.findAll({
+                        attributes: [['picture', 'background_image'], 'id', 'name', 'description', 'releaseDate', 'platforms'],
+                        include: "genres", 
+                        }).then(resp => {
             console.log(resp); 
             parsedArray=[...resp,...parsedArray]
-            parsedArray.splice(100); // el máximo debe ser 100
+             // el máximo debe ser 100
             /* console.log(parsedArray); */
             res.send(parsedArray);
         })
