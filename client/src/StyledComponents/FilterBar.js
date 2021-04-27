@@ -57,3 +57,18 @@ export const BarStyled = styled.div`
             font-family: 'JetBrains Mono';
         }
 `
+
+
+export const CreatorBar = styled.div`
+            display: flex;
+            width: 150px;
+            
+            .containerButton {
+                    width: 33%;
+
+                    }
+
+            .filterButton {
+                    width: 97%;
+                    }
+`

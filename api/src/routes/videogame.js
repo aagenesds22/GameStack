@@ -27,15 +27,23 @@ app.get(`/:idVideoGame`, (req, res) => {
       const apiFound = axios({
          method: "get",
          url: `https://api.rawg.io/api/games/${req.params.idVideoGame}?key=${API_KEY}`
-      }).then(response => response.data);
+      }).then(response => {
+         
+         return {
+            ...response.data,
+            platforms: response.data.platforms.map(elem => {
+
+               return elem.platform.name
+
+            })}});
       console.log(apiFound);
       Promise.allSettled([dbFound, apiFound]).then(response => {
          
          for(let i = 0; i < response.length; i++) {
-            console.log(response[i].status);
-            if(response[i].status === 'fulfilled') return res.status(200).send(response[i].value);
+               console.log(response[i].status);
+               if(response[i].status === 'fulfilled') return res.status(200).send(response[i].value);
                         
-         }
+            }
 
          return res.status(404).send("Not Found");
       }
@@ -84,7 +92,7 @@ app.post(`/`, (req, res) => {
       description, 
       releaseDate,
       rating,
-      platforms,
+      platforms: platforms.join(","),
    }).then(resp => resp.addGenre(genres).then(resp=> res.send(resp), err=> res.status(404).send(err))) 
 
    /* added.addGenre([...genres]).then(resp=> res.send(resp), err=> res.status(404).send(err)); */

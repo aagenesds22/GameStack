@@ -39,64 +39,12 @@ useEffect(() => {
         <div style={{width: '100%', display: 'inherit', flexDirection: 'column', backgroundColor: 'rgb(0,0,25, 0.85)', paddingBottom: '4em'}}>
   
         <div style={{display: 'flex', flexWrap: 'wrap', justifyContent: 'space-around', backdropFilter: 'blur(2px)'}}>
-            {loadStandard(props, !props.genreFiltered && 
+            {loadStandard(props, !props.filtered/* !props.genreFiltered && 
                 !props.alphaFiltered && 
                 !props.inverseAlphaFiltered && 
                 !props.ratingFiltered && 
-                !props.ratingDecreasingFiltered ? props.videogames : props.orderedVideogames)
-            /* loadStandard(props) *//* props.videogames.slice(props.page.prev, props.page.next).map((elem,index) =>  (
-                loadStandard(!props.genreFiltered && 
-                !props.alphaFiltered && 
-                !props.inverseAlphaFiltered && 
-                !props.ratingFiltered && 
-                !props.ratingDecreasingFiltered ? props.videogames : props.orderedVideogames)
-                    <AnimatedCardGame key={index+1*Math.random()*Math.PI} delayTime={`${0.1+(index/10)}`} >
-
-                <div style={{
-                    width: '100%', 
-                    height: 'min-content', 
-                    display: 'flex', 
-                    flexDirection: 'column', 
-                    alignItems: 'center'}}>
-
-                    <Link onClick={(e) => {props.showGameById(elem)}} to={`/game/${elem.id}`} >
-
-                        <img src={`${elem['background_image']}`}/>
-                        <h5 style={{
-                            margin: '0 auto', 
-                            width: '100%', 
-                            textAlign: 'center'}}>{elem.name}</h5>
-                    </Link>
-                </div>
-
-
-
-                    </AnimatedCardGame>
-
-
-        )) */}{/* {
-        <div style={{display: 'block', position: 'absolute', display: 'inherit', justifyContent: 'space-around', width: '60%'}}>
-        <button onClick={()=> pageSet(prevPage => {
-        return {
-
-        prev: prevPage.prev-15,
-        next: prevPage.prev,
-
-        }})} disabled={page.prev < 15}>Prev</button>
-        {[...props.orderedVideogames].slice(0, Math.ceil(props.videogames.length/15)).map((elem,index) => (
-        <button key={index} onClick={()=> pageSet({
-                prev: index*15,
-                next: (index+1)*15
-        })}>{index+1}</button>
-        ))}
-        <button onClick={()=> pageSet(prevPage => {
-        return {
-        prev: prevPage.next,
-        next: prevPage.next+15,
-            }
-            })} disabled={page.next > props.orderedVideogames.length}>Next</button>
-            </div>
-        } */}</div>
+                !props.ratingDecreasingFiltered */ ? props.videogames : props.orderedVideogames)
+            }</div>
             </div>
 
    )
@@ -109,6 +57,7 @@ const mapStateToProps = (state) => {
         currentGenre: state.currentGenre,
         genres: state.genres,
         isEmpty: state.isEmpty,
+        filtered: state.filtered,
         genreFiltered: state.genreFiltered,
         alphaFiltered: state.alphaFiltered,
         inverseAlphaFiltered: state.inverseAlphaFiltered,

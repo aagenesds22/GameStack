@@ -1,7 +1,7 @@
 import React, {useState} from 'react';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
-import {filterGenre} from '../actions/actions';
+import {filterGenre, resetFilters} from '../actions/actions';
 import {BarStyled} from '../StyledComponents/FilterBar';
 
 
@@ -14,7 +14,8 @@ function FilterGenreBar (props) {
             className="formOrdering"
             onSubmit={(e) => {
                         e.preventDefault();
-                        props.filterGenre(selectedGenre);
+                        selectedGenre !== 'None' ? props.filterGenre(selectedGenre) :
+                                                      props.resetFilters();
                         return;
             }}>
          <select 
@@ -55,7 +56,7 @@ const mapStateToProps = (state) => {
 }
 
 const mapDispatchToProps = (dispatch) => {
-    return bindActionCreators({filterGenre}, dispatch);
+    return bindActionCreators({filterGenre, resetFilters}, dispatch);
 }
 
 

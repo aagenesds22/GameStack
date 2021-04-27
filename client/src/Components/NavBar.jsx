@@ -3,7 +3,7 @@ import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
 import {filterGenre, resetFilters, filterAlpha, filterInverseAlpha, filterDecreasingRating, filterIncreaseRating} from '../actions/actions';
 import SearchBar from './SearchBar';
-import {NavigationBar} from '../StyledComponents/NavBar';
+import {NavigationBar, NavigationMenu} from '../StyledComponents/NavBar';
 import Pagination from './Pagination';
 import {NavLink} from 'react-router-dom';
 import {ReactComponent as Stars} from '../star_prototype_Webpage2.svg';
@@ -30,9 +30,9 @@ function NavBar (props) {
         
               
               {props.searchBar && <SearchBar />}
-              <div style={{width: '30%', height: 'min-content', width: '20%'}}>
+              <NavigationMenu>
                   <ul style={{display: 'flex', listStyleType:'none', padding: '0', height: 'inherit'}}>
-                  <NavLink to='/home' style={{textDecoration: 'none', color: 'white'}}>
+                  <NavLink to='/home' style={{textDecoration: 'none'}}>
                   <li>
                       Home
                   </li>
@@ -44,7 +44,7 @@ function NavBar (props) {
                   </NavLink>
 
                   </ul>
-              </div>
+              </NavigationMenu>
               {/* <Pagination page={props.paginationState} pageSet={props.paginationFunction}/>
               <SearchBar /> */}
                    

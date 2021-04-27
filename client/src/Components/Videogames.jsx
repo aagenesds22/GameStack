@@ -5,9 +5,7 @@ import {queryContent,
        filterIncreaseRating,
        filterDecreasingRating,
        filterGenre,
-       resetFilters,
-       getGenres, 
-       querySearchContent, 
+       getGenres,
        showGameById} from '../actions/actions';
 import Pagination from './Pagination.jsx';
 import {connect} from 'react-redux';
@@ -21,6 +19,7 @@ import JetBrains from '../assets/fonts/jetbrains';
 import {Footer} from '../StyledComponents/Footer';
 import FilterBar from './FilterBar';
 import FilterGenreBar from './FilterGenreBar';
+import FilterCreator from './FilterCreator';
 import {ReactComponent as SpinnerSVG} from '../Spinner-1.3s-384px.svg';
 
 
@@ -145,18 +144,6 @@ function VideogamesGrid(props) {
         }
 
 
-        
-        /* useEffect(() => {
-
-              setTimeout(() => {testRef.current.style.overflowY = 'scroll'}, 4000);
-              return;
-        }, [props.videogames, props.orderedVideogames])
- */
-
-       
-       
-       /* }, []) */
-
        return (
               <div style={{
                      width: 'inherit', 
@@ -164,26 +151,12 @@ function VideogamesGrid(props) {
                      height: 'max-content',
                      backgroundColor: 'rgb(0,0,0, 0.9)'}}>
               
-              {/* <button onClick={() => {
-
-                     props.filterGenre
-              }}></button> */}
-
-              {/* <input list="genres" autoComplete="off" placeholder="Filter by genre" /> */}
               <NavBar 
                      paginationState={page} 
                      paginationComponent={true} 
                      searchBar={true}
                      paginationFunction={(elem)=> setPage(elem)}/>
 
-              {/* <div>
-                     <span>Filter by Genre:</span>
-              <select name="genres" onChange={(e)=> props.filterGenre(e.target.value)}>
-                     {props.genres.map((elem,index) => (<option key={index} value={elem.name}>
-                            {elem.name}
-                     </option>))}
-              </select>
-              </div> */}
 
 
               {/* <SearchBar /> */}
@@ -214,14 +187,14 @@ function VideogamesGrid(props) {
                             justifyContent: 'space-evenly'
                      }}>
                      
-                     <FilterGenreBar />
-                     
-                     <FilterBar />
-                     </div>
+                                   <FilterGenreBar />
+                                   <FilterCreator />
+                                   <FilterBar />
+                            </div>
                             {/* ADD SPINNER */}
                      
-                     <GameGrid page={page}/>
-                     <Pagination page={page} pageSet={setPage}/>
+                            <GameGrid page={page}/>
+                            <Pagination page={page} pageSet={setPage}/>
                      </div>) : <MenuBars page={page} setPage={setPage}/>}
                      </div>)}
                      
@@ -252,7 +225,7 @@ const mapStateToProps = (state) => {
 }
 
 const mapDispatchToProps = (dispatch) => {
-       return bindActionCreators({queryContent, getGenres, querySearchContent, filterAlpha, filterInverseAlpha, filterIncreaseRating, filterDecreasingRating, filterGenre, resetFilters, showGameById}, dispatch)
+       return bindActionCreators({queryContent, getGenres, filterAlpha, filterInverseAlpha, filterIncreaseRating, filterDecreasingRating, filterGenre, showGameById}, dispatch)
 }
 
 

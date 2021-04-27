@@ -14,6 +14,7 @@ export const InputDiv = styled.div`
             display: flex;            
             flex-direction: column;
             justify-content: space-between;
+            
             height: inherit;
             
         }
@@ -23,10 +24,20 @@ export const InputDiv = styled.div`
             width: 100%;
             border-radius: 15px;
             border: 3px solid yellow;
+            margin-bottom: 22px;
             color: white;
             outline: none;
             background-color: rgb(255,255,255, 0.3);
+        
         }
+    
+        .slideContainer {
+            margin-bottom: 22px;
+          
+               
+        }
+
+   
 
         .genreBlock {
             
@@ -37,5 +48,6 @@ export const InputDiv = styled.div`
             flexWrap: wrap;
             width: 100%;
             background-color: transparent;
+            margin-bottom: 22px;
         }
 `

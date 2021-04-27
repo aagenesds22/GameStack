@@ -51,11 +51,11 @@ function Pagination(props) {
 console.log(props);
 return (
   <>
-    {loadPagination(props, !props.genreFiltered && 
+    {loadPagination(props, !props.filtered/* !props.genreFiltered && 
                 !props.alphaFiltered && 
                 !props.inverseAlphaFiltered && 
                 !props.ratingFiltered && 
-                !props.ratingDecreasingFiltered ? props.videogames : props.orderedVideogames)}
+                !props.ratingDecreasingFiltered  */? props.videogames : props.orderedVideogames)}
     {/* <div style={{
       position: 'relative', 
       display: 'inherit',
@@ -103,6 +103,7 @@ return (
 const mapStateToProps = (state) => {
   return {
     videogames: state.videogames,
+    filtered: state.filtered,
     orderedVideogames: state.orderedVideogames,
     genreFiltered: state.genreFiltered,
     alphaFiltered: state.alphaFiltered,

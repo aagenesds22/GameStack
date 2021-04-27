@@ -8,7 +8,10 @@ import {QUERY_CONTENT,
     FILTER_INVERSE_ALPHA, 
     FILTER_RATING, 
     FILTER_DECREASING_RATING, 
-    FILTER_GENRE, 
+    FILTER_GENRE,
+    FILTER_BOTH,
+    FILTER_USER_CREATOR,
+    FILTER_API_CREATOR,
     RESET_FILTERS} from '../actions/actions';
 
 
@@ -16,21 +19,19 @@ import {QUERY_CONTENT,
 
 const initialState = {
     videogames: [],
-    orderedVideogames: [],
-    
+    orderedVideogames: [], 
     genres: [],
-    idGame: {
-
-    },
+    idGame: {},
     currentGenre: '',
-    genreFiltered: false, // filtrado por genero?
-    searched: false, // buscado por el cliente?
-    alphaFiltered: false, // ordenado A-Z?
+    filtered: false,
+    /* genreFiltered: false, */ // filtrado por genero?
+    searched: false, // buscado por el cliente? IMPORTANTE
+   /*  alphaFiltered: false, // ordenado A-Z?
     ratingFiltered: false,
     ratingDecreasingFiltered: false,
-    inverseAlphaFiltered: false, // ordenado Z-A?
-    isEmpty: true, // está vacio videogames: [] ?
-    isGameIdEmpty: true, // está vacio el juego seleccionado idGame: {}
+    inverseAlphaFiltered: false, */ // ordenado Z-A?
+    isEmpty: true, // está vacio videogames: [] ? IMPORTANTE
+    isGameIdEmpty: true, // está vacio el juego seleccionado idGame: {} IMPORTANTE
 };
 
 
@@ -49,12 +50,13 @@ const rootReducer = (state = initialState, action) => {
             return {
                 ...state,
                 videogames: action.payload.data,
+                filtered: false, 
                 searched: true,
-                alphaFiltered: false,
+              /*   alphaFiltered: false,
                 inverseAlphaFiltered: false,
                 ratingFiltered: false,
                 ratingDecreasingFiltered: false,
-                genreFiltered: false,
+                genreFiltered: false, */
                 currentGenre: '',
                 isEmpty: false,
             };
@@ -62,60 +64,26 @@ const rootReducer = (state = initialState, action) => {
             return {
                 ...state,
                 videogames: [...''],
+                filtered: false,
                 searched: false,
                 isEmpty: true,
-                alphaFiltered: false,
+                /* alphaFiltered: false,
                 inverseAlphaFiltered: false,
                 ratingFiltered: false,
                 ratingDecreasingFiltered: false,
-                genreFiltered: false,
+                genreFiltered: false, */
                 currentGenre: '',
 
-            } /* : state.genreFiltered ? {
-                ...state,
-                orderedVideogames: action.payload.data.filter(elem => {
-                    let flag;
-                    elem.genres.forEach(elem => {
-                        if(elem.name === state.currentGenre) flag = true;
-                    })
-                    if(flag) return elem;
-                }),
-                searched: true
-            } : state.alphaFiltered ? {
-                ...state,
-                orderedVideogames: action.payload.data.sort((a,b) => {
-                   
-                        return a.name < b.name ? -1 : a.name > b.name ? 1 : 0;
-                    
-                }),
-                searched: true,
-            } : state.inverseAlphaFiltered ? {
-                ...state, 
-                orderedVideogames: action.payload.data.sort((a,b) => {
-                    return a.name < b.name ? 1 : a.name > b.name ? -1 : 0;
-                })   
-            } : state.ratingFiltered ? {
-                ...state, 
-                orderedVideogames: action.payload.data.sort((a,b) => {
-                    return a.rating < b.rating ? -1 : a.rating > b.rating ? 1 : 0;
-                }),
-                searched: true, 
-            } : state.ratingDecreasingFiltered ? {
-                ...state, 
-                orderedVideogames: action.payload.data.sort((a,b) => {
-                    return a.rating < b.rating ? 1 : a.rating > b.rating ? -1 : 0;
-                }),
-                searched: true,  
-            } : { // CONFIGURAR -----> ACTION.PAYLOAD EN EL FOREACH DEBE SER EL GÉNERO CORRIENTE
-                
-            }; */
+            } 
         case GET_GENRES: 
         return {
             ...state,
             genres: action.payload.data,
         };
         case SHOW_GAME_BY_ID_SERVER:
+
             console.log(action.payload);
+
             return action.payload === 'Not Found' ? {...state,
                 idGame: 'empty',
             } : {
@@ -131,195 +99,118 @@ const rootReducer = (state = initialState, action) => {
             }
         case FILTER_ALPHA:
 
-            return !state.genreFiltered ? { // no se ordenó previamente de A-Z
+            return !state.filtered ? {
                 ...state,
-                orderedVideogames: [...state.videogames].sort((a, b) => {
+                orderedVideogames: [...state.videogames].sort((a,b) => {
                     return a.name < b.name ? -1 : a.name > b.name ? 1 : 0;
                 }),
-                alphaFiltered: true,
-                inverseAlphaFiltered: false,
-                ratingFiltered: false,
-                ratingDecreasingFiltered: false,
-
+                filtered: true,
             } : {
-
                 ...state,
                 orderedVideogames: [...state.orderedVideogames].sort((a, b) => {
                     return a.name < b.name ? -1 : a.name > b.name ? 1 : 0;
-                }),
-                alphaFiltered: true,
-                inverseAlphaFiltered: false,
-                ratingFiltered: false,
-                ratingDecreasingFiltered: false,
-            } /* : state.genreFiltered ? {
-
-                    ...state,
-                    orderedVideogames: [...state.orderedVideogames].sort((a, b) => {
-                        return a.name < b.name ? -1 : a.name > b.name ? 1 : 0;
-                    }),
-                    alphaFiltered: !state.alphaFiltered,
-
-            } : state.searched && !state.alphaFiltered ? { // se buscó, pero no se ordenó previamente de A-Z
-                ...state,
-                searchVideogames: [...state.searchVideogames].sort((a,b) => {
-                    return a.name < b.name ? -1 : a.name > b.name ? 1 : 0;
-                }),
-                alphaFiltered: !state.alphaFiltered,
-            } : {...state, alphaFiltered: !state.alphaFiltered}; */
+                })
+            } 
         case FILTER_INVERSE_ALPHA: 
-        return !state.genreFiltered ? {
+        return !state.filtered ? {
             ...state,
             orderedVideogames: [...state.videogames].sort((a,b) => {
-                return a.name < b.name ? 1 : a.name > b.name ? -1 : 0;
+                return a.name < b.name ? 1 : a.name > b.name? -1 : 0;
             }),
-            inverseAlphaFiltered: true,
-            alphaFiltered: false,
-            ratingFiltered: false,
-            ratingDecreasingFiltered: false,
+            filtered: true,
         } : {
             ...state,
-            orderedVideogames: [...state.orderedVideogames].sort((a,b) => {
+            orderedVideogames: [...state.orderedVideogames].sort((a, b) => {
                 return a.name < b.name ? 1 : a.name > b.name ? -1 : 0;
-            }),
-            inverseAlphaFiltered: true,
-            alphaFiltered: false,
-            ratingFiltered: false,
-            ratingDecreasingFiltered: false,
-        };
+            })
+        }
+        
+         
         case FILTER_RATING:
-            return !state.genreFiltered ? {
+            return !state.filtered? {
                 ...state,
                 orderedVideogames: [...state.videogames].sort((a,b) => {
                     return a.rating < b.rating ? -1 : a.rating > b.rating ? 1 : 0;
                 }),
-                inverseAlphaFiltered: false,
-                alphaFiltered: false,
-                ratingFiltered: true,
-                ratingDecreasingFiltered: false,
+                filtered: true,
             } : {
                 ...state,
                 orderedVideogames: [...state.orderedVideogames].sort((a,b) => {
                     return a.rating < b.rating ? -1 : a.rating > b.rating ? 1 : 0;
                 }),
-                inverseAlphaFiltered: false,
-                alphaFiltered: false,
-                ratingFiltered: true,
-                ratingDecreasingFiltered: false,
-            };
+            }
+            
         case FILTER_DECREASING_RATING: 
-        return !state.genreFiltered ? {
+        return !state.filtered ? {
             ...state,
             orderedVideogames: [...state.videogames].sort((a,b) => {
                 return a.rating < b.rating ? 1 : a.rating > b.rating ? -1 : 0;
             }),
-            inverseAlphaFiltered: false,
-            alphaFiltered: false,
-            ratingFiltered: false,
-            ratingDecreasingFiltered: true,
+          filtered: true,
         } : {
             ...state,
             orderedVideogames: [...state.orderedVideogames].sort((a,b) => {
                 return a.rating < b.rating ? 1 : a.rating > b.rating ? -1 : 0;
             }),
-            inverseAlphaFiltered: false,
-            alphaFiltered: false,
-            ratingFiltered: false,
-            ratingDecreasingFiltered: true,
-        };
+
+        }; 
         case FILTER_GENRE:
 
-            return  action.payload == 'None' ? {
+            return !state.filtered ?
+            {
+            ...state,
+            orderedVideogames: [...state.videogames].filter((elem) => {
+                let flag;
+                elem.genres.forEach(elem => {
+                    if(elem.name === action.payload) flag = true;
+                })
+
+                if(flag) return elem;
+                
+            }),
+            filtered: true,
+            currentGenre: action.payload, } : {
+
                 ...state,
-                orderedVideogames: [...state.videogames],
-                genreFiltered: false,
-                currentGenre: "",
-            } : !state.alphaFiltered && !state.inverseAlphaFiltered && !state.ratingFiltered && !state.ratingDecreasingFiltered ? { 
-                ...state,
-                orderedVideogames: [...state.videogames].filter((elem) => {
+                orderedVideogames: [...state.orderedVideogames].filter((elem) => {
+
                     let flag;
                     elem.genres.forEach(elem => {
                         if(elem.name === action.payload) flag = true;
-                    })
-                    if(flag) return elem;
-                }),
-                genreFiltered: true,
-                currentGenre: action.payload,
-            } : state.alphaFiltered ? {
-                ...state,
-                orderedVideogames: [...state.videogames].filter((elem) => {
-                    let flag;
-                    elem.genres.forEach(elem => {
-                        if(elem.name === action.payload) flag = true;
+
                     })
 
                     if(flag) return elem;
-                    
-                }).sort((a,b) => {
-                    return a.name < b.name ? -1 : a.name > b.name ? 1 : 0;
                 }),
-                genreFiltered: true,
-                currentGenre: action.payload,
-            } : state.inverseAlphaFiltered ? {
-                ...state,
-                orderedVideogames: [...state.videogames].filter((elem) => {
-                    let flag;
-                    elem.genres.forEach(elem => {
-                        if(elem.name === action.payload) flag = true;
-                    })
-
-                    if(flag) return elem;
-                    
-                }).sort((a,b) => {
-                    return a.name < b.name ? 1 : a.name > b.name ? -1 : 0;
-                }),
-                genreFiltered: true,
-                currentGenre: action.payload,
-            } : state.ratingFiltered ? {
-                ...state,
-                orderedVideogames: [...state.videogames].filter((elem) => {
-                    let flag;
-                    elem.genres.forEach(elem => {
-                        if(elem.name === action.payload) flag = true;
-                    })
-
-                    if(flag) return elem;
-                }).sort((a,b) => {
-                    return a.rating < b.rating ? -1 : a.rating > b.rating ? 1 : 0;
-                }),
-                genreFiltered: true,
-                currentGenre: action.payload,
-            } : {
-                ...state,
-                orderedVideogames: [...state.videogames].filter((elem) => {
-                    let flag;
-                    elem.genres.forEach(elem => {
-                        if(elem.name === action.payload) flag = true;
-                    })
-
-                    if(flag) return elem;
-                }).sort((a,b) => {
-                    return a.rating < b.rating ? 1 : a.rating > b.rating ? -1 : 0;
-                }),
-                genreFiltered: true,
                 currentGenre: action.payload,
             }
-                /* : state.searched && !state.alphaFiltered && !state.genreFiltered ? { // hay algo buscado, pero no ordenado
-                ...state,
-                searchVideogames: [...state.searchVideogames].filter(elem => elem.genres === action.payload),
-                genreFiltered: !state.genreFiltered,
-                
-            } : state.filtered && state.searched && !state.genreFiltered ? { 
-                // hay algo buscado, previamente ordenado pero no por género
-            } : {...state, filtered: !state.alphaFiltered}; */
             case RESET_FILTERS:
                 return {
                     ...state,
-                    alphaFiltered: false,
+                    /* alphaFiltered: false,
                 inverseAlphaFiltered: false,
                 ratingFiltered: false,
-                ratingDecreasingFiltered: false,
-                
+                ratingDecreasingFiltered: false, */
+
+                filtered: false,
                 }
+            case FILTER_USER_CREATOR:
+                return {
+                    ...state,
+                    orderedVideogames: [...state.videogames].filter(elem => /^[0-9a-f]{8}-[0-9a-f]{4}-[0-5][0-9a-f]{3}-[089ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(elem.id)),
+                    filtered: true,
+                } 
+            case FILTER_BOTH:
+                return {
+                    ...state,
+                    filtered: false,
+                       };
+            case FILTER_API_CREATOR:
+                return {
+                    ...state,
+                    orderedVideogames: [...state.videogames].filter(elem => Number.isInteger(elem.id)),
+                    filtered: true,
+                       }
         default:
             return state;
     }

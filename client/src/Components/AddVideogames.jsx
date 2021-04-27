@@ -16,7 +16,7 @@ function AddVideogames (props) {
       releaseDate: "",
       rating: 5.0,
       genres: [],
-      platforms: "",
+      platforms: [],
     })
 
     const [width, setWidth] = useState(window.innerWidth);
@@ -35,6 +35,7 @@ function AddVideogames (props) {
     }, [])
 
     const nameRef = useRef(null);
+    const platformRef = useRef(null);
     const changeWidth = () => {
         setWidth(window.innerWidth);
         return;
@@ -50,30 +51,58 @@ function AddVideogames (props) {
         })
     }
 
+    const handleCheckbox = (e) => {
+        setData(prevState => {
+            const exists = prevState.platforms.indexOf(e.target.value);
+            return {...prevState,
+            platforms: prevState.platforms.includes(e.target.value) ? 
+                            prevState.platforms.slice(0, exists).concat(prevState.platforms.slice(exists+1)) :
+                                [...prevState.platforms, e.target.value],
+            }
+        })
+        return;
+    }
+
 
     const handleSubmit = (e) => {
         console.log(e);
 
         const {name, description, releaseDate, rating, genres, platforms} = data;
-
-        if(/[_+",.$#/!°]/g.test(name)) {
+        let savedBorder;
+        if(/[_+",.$#/!°]|^\s{1,}/g.test(name)) {
             e.preventDefault();
-            const savedBorder = nameRef.current.style.border;
+            savedBorder = nameRef.current.style.border;
             nameRef.current.scrollIntoView({behavior: 'smooth'});
             nameRef.current.style.border = '2px solid red';
             nameRef.current.disabled=true;
             nameRef.current.placeholder = 'Please insert a valid name'
+            nameRef.current.background = 'transparent';
             setTimeout(()=> {
                 nameRef.current.disabled=false; 
                 nameRef.current.style.border = savedBorder;
-                nameRef.current.placeholder = '';
+                nameRef.current.backgroundColor = 'rgb(255, 255, 255. 0.5)';
+                nameRef.current.placeholder = 'Enter a valid name...';
                 setData(prevVal => {return {
                     ...prevVal,
                     name: '',
                 }})
-                return;}, 860);
+                return;}, 1500);
                 console.log('yes, it has a _')
             return;
+        }
+
+        if(platforms.length < 1) {
+            e.preventDefault();
+            alert("You must choose at least one game platform first!");
+            savedBorder = platformRef.current.style.border;
+            platformRef.current.style.border = "2px solid red";
+            
+            setTimeout(() => {
+                platformRef.current.style.border = savedBorder;
+                return;
+            }, 1500);
+            console.log('yes, you must choose a platform');
+          return;
         }
 
         console.log('no _', name)
@@ -86,7 +115,7 @@ function AddVideogames (props) {
                 releaseDate,
                 rating,
                 genres: genres.map(elem => elem.id),
-                platforms,
+                platforms: Array.from(platforms),
             }});
         e.preventDefault();
         
@@ -257,18 +286,18 @@ function AddVideogames (props) {
 
         </div>
         {/* releaseDate */}
-        <div style={{
-                    width: '100%'
-                }}>
+        <div className="slideContainer">
         <label>
             
             Rating
             
             </label>
+            <span style={{marginLeft: '15px', color: 'yellow', fontWeight: '800'}}>{data.rating}</span>
         <input  type="range" 
                 onChange={handleChange} 
                 value={data.rating} 
-                name="rating" 
+                name="rating"
+                className="slider"
                 min={1} 
                 max={10} 
                 step={0.1} style={{
@@ -279,13 +308,71 @@ function AddVideogames (props) {
         
     
 
-        <div style={{
+        <div ref={platformRef} style={{
                     width: '100%'
                 }}>
         <label>Platforms<span style={{color: 'red', fontWeight: '900'}}>*</span></label>
-        <input type="text" 
-        className="normalInput"
-                 onChange={handleChange}></input>
+            <div style={{display: 'flex', color: 'white', flexWrap: 'wrap', justifyContent: 'space-evenly'}}>
+                {['PC', 'PS5', 'PS4', 'PS3', 'PS2', 'XBOX', 'PS1', 'Wii', 'Nintendo64'].map(elem => (
+                        <div style={{display: 'flex', width: '25%', justifyContent: 'center'}}>
+                            <label>{elem}</label>
+                        <input 
+                                type="checkbox" 
+                                value={elem}
+                        
+                                onChange={handleCheckbox}></input>
+                        </div>
+                    ))}
+               {/*  <div style={{display: 'flex', width: '25%'}}>
+                    
+                <label>PC</label>
+                <input 
+                        type="checkbox" 
+                        required
+                        
+                        onChange={handleChange}></input>
+                </div>
+                <div style={{display: 'flex', width: '25%'}}>
+                    <label>PS5</label>
+                        <input 
+                                type="checkbox" 
+                                required
+                        
+                                onChange={handleChange}></input>
+                    </div>
+                <div style={{display: 'flex', width: '25%'}}>
+                    <label>PS4</label>
+                        <input 
+                                type="checkbox" 
+                                required
+                        
+                                onChange={handleChange}></input>
+                    </div>
+                <div style={{display: 'flex', width: '25%'}}>
+                    <label>PS3</label>
+                        <input 
+                                type="checkbox" 
+                                required
+                        
+                                onChange={handleChange}></input>
+                    </div>
+                <div style={{display: 'flex', width: '25%'}}>
+                    <label>XBOX</label>
+                        <input 
+                                type="checkbox" 
+                                required
+                        
+                                onChange={handleChange}></input>
+                    </div>
+                <div style={{display: 'flex', width: '25%'}}>
+                    <label>PS2</label>
+                        <input 
+                                type="checkbox" 
+                                required
+                        
+                                onChange={handleChange}></input>
+                    </div> */}
+        </div>
         </div >
 
     

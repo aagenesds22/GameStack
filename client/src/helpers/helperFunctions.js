@@ -26,7 +26,10 @@ export const loadStandard = (props, arr, state, pageSet, ref, nit = 0, stop = 16
                      flexDirection: 'column', 
                      alignItems: 'center'}}>
  
-                     <Link onClick={(e) => {props.showGameByIdServer(elem.id)}} to={`/game/${elem.id}`} className='link'>
+                     <Link 
+                          onClick={(e) => {props.showGameByIdServer(elem.id)}} 
+                          to={`/game/${elem.id}`} 
+                          className='link'>
  
                          <img src={`${elem['background_image']}`}/>
                          <h5>{elem.name}</h5>
