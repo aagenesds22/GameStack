@@ -70,9 +70,6 @@ function FilterCreator(props) {
                                             
                                             >Both</button>
             </div>
-
-            {/* en REDUX, una action que reciba un SI/NO para mostrar únicamente los juegos
-            craedos porel usuario o de la API o ambos*/}
         </CreatorBar>
     )
 }

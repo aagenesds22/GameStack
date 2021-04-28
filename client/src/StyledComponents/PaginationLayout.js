@@ -1,4 +1,3 @@
-import React from 'react';
 import styled from 'styled-components';
 
 
@@ -10,6 +9,7 @@ export const PaginationLayout = styled.div`
         justify-content: center;
         width: 30%;
         margin: 0 auto;
+        padding-bottom: 1em;
         
         
         
@@ -27,6 +27,29 @@ export const PaginationLayout = styled.div`
             border: none;
             
             
+        }
+
+        .prevButton{
+            background-color: yellow;
+            color: black;
+            font-family: 'JetBrains Mono';
+            font-weight: 800;
+            font-size: 16px;
+            border-radius: 10px;
+        }
+
+        .nextButton {
+            background-color: yellow;
+            color: black;
+            font-family: 'JetBrains Mono';
+            font-weight: 800;
+            font-size: 16px;
+            border-radius: 10px;
+            
+        }
+
+        .prevButton:disabled, .nextButton:disabled {
+            display: none;
         }
 
        /*  

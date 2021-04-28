@@ -15,7 +15,7 @@ export const BarStyled = styled.div`
         }
 
         .formSearching {
-            width: max-content
+            width: max-content;
             display: flex;
             
 
@@ -34,8 +34,11 @@ export const BarStyled = styled.div`
             width:  min-content;
             display: flex;
             font-family: 'JetBrains Mono';
-            
 
+        }
+
+        .formOrdering form {
+            width: 25%;
         }
 
         .deployable {
@@ -64,11 +67,22 @@ export const CreatorBar = styled.div`
             width: 150px;
             
             .containerButton {
-                    width: 33%;
+                    width: 40%;
 
                     }
 
             .filterButton {
-                    width: 97%;
+                    width: max-content;
+                    border-radius: 7px;
+                    font-family: 'JetBrains Mono';
+                    font-weight: 600;
+                    border: none;
+                    font-size: 15px;
                     }
+
+            .filterButton:disabled {
+                background-color: yellow;
+                color: black;
+                font-weight: 800;
+            }
 `

@@ -1,19 +1,19 @@
-import React, {useRef} from 'react';
-import {bindActionCreators} from 'redux';
+import React from 'react';
 import {connect} from 'react-redux';
-import {filterGenre, resetFilters, filterAlpha, filterInverseAlpha, filterDecreasingRating, filterIncreaseRating} from '../actions/actions';
 import SearchBar from './SearchBar';
 import {NavigationBar, NavigationMenu} from '../StyledComponents/NavBar';
-import Pagination from './Pagination';
-import {NavLink} from 'react-router-dom';
+import {Link} from 'react-router-dom';
 import {ReactComponent as Stars} from '../star_prototype_Webpage2.svg';
 import {StarLogo} from '../StyledComponents/LogoNavBar';
+import {ReactComponent as HomeIcon} from '../home-icon-silhouette-svgrepo-com.svg';
+import {ReactComponent as AddIcon} from '../plus-sign-svgrepo-com.svg';
+import {ReactComponent as InfoIcon} from '../info-svgrepo-com.svg'
 
 
 
 function NavBar (props) {
 
-    console.log('test33', props);
+    
     return (
         <NavigationBar>
 
@@ -32,16 +32,24 @@ function NavBar (props) {
               {props.searchBar && <SearchBar />}
               <NavigationMenu>
                   <ul style={{display: 'flex', listStyleType:'none', padding: '0', height: 'inherit'}}>
-                  <NavLink to='/home' style={{textDecoration: 'none'}}>
+                  <Link to='/home' style={{textDecoration: 'none'}}>
+                      
                   <li>
+                      <HomeIcon />
+                      <span>
                       Home
+                      </span>
                   </li>
-                  </NavLink>
-                  <NavLink to='/addYourFavorite' style={{textDecoration: 'none'}}>
+                  </Link>
+                  <Link to='/create_game' style={{textDecoration: 'none'}}>
                       <li>
-                          Add your FAV
+                          <AddIcon />
+                          <span>
+                          Create game
+                          </span>
                       </li>
-                  </NavLink>
+                  </Link>
+                  
 
                   </ul>
               </NavigationMenu>
@@ -63,18 +71,11 @@ const mapStateToProps = (state) => {
         searchQuery: state.searchVideogames,
         orderedVideogames: state.orderedVideogames,
         genres: state.genres,
-        inverseAlphaFiltered: state.inverseAlphaFiltered,
-        alphaFiltered: state.alphaFiltered,
-        genreFiltered: state.genreFiltered,
-        ratingFiltered: state.ratingFiltered,
-        ratingDecreasingFiltered: state.ratingDecreasingFiltered,
         isEmpty: state.isEmpty,
         searched: state.searched,
  }
 }
 
-const mapDispatchToProps = (dispatch) => {
-    return bindActionCreators({filterGenre, resetFilters, filterAlpha, filterInverseAlpha, filterIncreaseRating, filterDecreasingRating}, dispatch);
-}
 
-export default connect(mapStateToProps, mapDispatchToProps)(NavBar);
+
+export default connect(mapStateToProps, null)(NavBar);

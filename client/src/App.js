@@ -14,7 +14,7 @@ function App() {
   return (
     <>
     <JetBrains />
-      <Route exact path='/addYourFavorite' component={AddVideogames} />
+      <Route exact path='/create_game' component={AddVideogames} />
       <Route exact path='/' component={Home}/>
       <Route exact path='/home' component={VideogamesGrid}/>
       <Route exact path='/game/:id' component={Videogame} />

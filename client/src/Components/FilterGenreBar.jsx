@@ -8,6 +8,7 @@ import {BarStyled} from '../StyledComponents/FilterBar';
 function FilterGenreBar (props) {
 
     const [selectedGenre, setSelectedGenre] = useState("None");
+    
     return (<BarStyled>
                 <span>Filter by:</span>
         <form 

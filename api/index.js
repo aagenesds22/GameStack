@@ -20,13 +20,14 @@
 const { default: axios } = require('axios');
 const server = require('./src/app.js');
 const { conn, Genre } = require('./src/db.js');
+const {API_KEY} = process.env;
 
 // Syncing all the models at once.
 conn.sync({ force: true }).then(() => {
   server.listen(3001, () => {
 
     axios({
-      url: `https://api.rawg.io/api/genres?key=e7b06e6d0b694168949d5daf64b0be1b`,
+      url: `https://api.rawg.io/api/genres?key=${API_KEY}`,
       method: 'get', 
      }).then(response => {
 

@@ -7,7 +7,7 @@ sequelize.define('genre', {
 
     id: {
       type: DataTypes.INTEGER,
-      allowNull: true,
+      allowNull: false,
       primaryKey: true,
     },
 

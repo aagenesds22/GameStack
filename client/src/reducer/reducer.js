@@ -1,7 +1,6 @@
 import {QUERY_CONTENT, 
     QUERY_RESET_CONTENT,
     QUERY_SEARCH, 
-    SHOW_GAME_BY_ID, 
     GET_GENRES, 
     SHOW_GAME_BY_ID_SERVER, 
     FILTER_ALPHA, 
@@ -24,14 +23,9 @@ const initialState = {
     idGame: {},
     currentGenre: '',
     filtered: false,
-    /* genreFiltered: false, */ // filtrado por genero?
-    searched: false, // buscado por el cliente? IMPORTANTE
-   /*  alphaFiltered: false, // ordenado A-Z?
-    ratingFiltered: false,
-    ratingDecreasingFiltered: false,
-    inverseAlphaFiltered: false, */ // ordenado Z-A?
-    isEmpty: true, // está vacio videogames: [] ? IMPORTANTE
-    isGameIdEmpty: true, // está vacio el juego seleccionado idGame: {} IMPORTANTE
+    searched: false, 
+    isEmpty: true,
+    isGameIdEmpty: true, 
 };
 
 
@@ -52,11 +46,6 @@ const rootReducer = (state = initialState, action) => {
                 videogames: action.payload.data,
                 filtered: false, 
                 searched: true,
-              /*   alphaFiltered: false,
-                inverseAlphaFiltered: false,
-                ratingFiltered: false,
-                ratingDecreasingFiltered: false,
-                genreFiltered: false, */
                 currentGenre: '',
                 isEmpty: false,
             };
@@ -67,11 +56,6 @@ const rootReducer = (state = initialState, action) => {
                 filtered: false,
                 searched: false,
                 isEmpty: true,
-                /* alphaFiltered: false,
-                inverseAlphaFiltered: false,
-                ratingFiltered: false,
-                ratingDecreasingFiltered: false,
-                genreFiltered: false, */
                 currentGenre: '',
 
             } 
@@ -91,37 +75,31 @@ const rootReducer = (state = initialState, action) => {
                 idGame: action.payload === 'reset' ? {} : action.payload,
                 isGameIdEmpty: action.payload === 'reset' ? true : false,
             };
-        case SHOW_GAME_BY_ID:
-            return {
-                ...state,
-                idGame: action.payload,
-                isGameIdEmpty: false,
-            }
         case FILTER_ALPHA:
 
             return !state.filtered ? {
                 ...state,
                 orderedVideogames: [...state.videogames].sort((a,b) => {
-                    return a.name < b.name ? -1 : a.name > b.name ? 1 : 0;
+                    return a.name.toLowerCase() < b.name.toLowerCase() ? -1 : a.name.toLowerCase() > b.name.toLowerCase() ? 1 : 0;
                 }),
                 filtered: true,
             } : {
                 ...state,
                 orderedVideogames: [...state.orderedVideogames].sort((a, b) => {
-                    return a.name < b.name ? -1 : a.name > b.name ? 1 : 0;
+                    return a.name.toLowerCase() < b.name.toLowerCase() ? -1 : a.name.toLowerCase() > b.name.toLowerCase() ? 1 : 0;
                 })
             } 
         case FILTER_INVERSE_ALPHA: 
         return !state.filtered ? {
             ...state,
             orderedVideogames: [...state.videogames].sort((a,b) => {
-                return a.name < b.name ? 1 : a.name > b.name? -1 : 0;
+                return a.name.toLowerCase() < b.name.toLowerCase() ? 1 : a.name.toLowerCase() > b.name.toLowerCase()? -1 : 0;
             }),
             filtered: true,
         } : {
             ...state,
             orderedVideogames: [...state.orderedVideogames].sort((a, b) => {
-                return a.name < b.name ? 1 : a.name > b.name ? -1 : 0;
+                return a.name.toLowerCase() < b.name.toLowerCase() ? 1 : a.name.toLowerCase() > b.name.toLowerCase() ? -1 : 0;
             })
         }
         
@@ -165,7 +143,7 @@ const rootReducer = (state = initialState, action) => {
                     if(elem.name === action.payload) flag = true;
                 })
 
-                if(flag) return elem;
+                return flag && elem;
                 
             }),
             filtered: true,
@@ -180,18 +158,13 @@ const rootReducer = (state = initialState, action) => {
 
                     })
 
-                    if(flag) return elem;
+                    return flag && elem;
                 }),
                 currentGenre: action.payload,
             }
             case RESET_FILTERS:
                 return {
                     ...state,
-                    /* alphaFiltered: false,
-                inverseAlphaFiltered: false,
-                ratingFiltered: false,
-                ratingDecreasingFiltered: false, */
-
                 filtered: false,
                 }
             case FILTER_USER_CREATOR:

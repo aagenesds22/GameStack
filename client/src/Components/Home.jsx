@@ -1,14 +1,10 @@
-import React, {useEffect, useState} from 'react';
-import {connect} from 'react-redux';
-import {bindActionCreators} from 'redux';
-import {queryContent, querySearchContent, filterAlpha, showGameById} from '../actions/actions';
+import React from 'react';
 import {Link} from 'react-router-dom';
-import styled from 'styled-components';
 import { ReactComponent as YourSvg }  from '../star_prototype_Webpage2.svg'
 import {MainPage, StarDiv} from '../StyledComponents/Main';
 
 
-function Home(props) {
+export default function Home(props) {
 
 
     return (
@@ -27,9 +23,9 @@ function Home(props) {
             </StarDiv>
             <div className="container">
             <h1>GameStack</h1>
-            
+            <p>Query your favorite game. Save your old games here!</p>
             <Link to='/home' className="link">
-              <span className="hoverButton">Videogames</span>
+              <span className="hoverButton">Click to enter</span>
               
             </Link>
             </div>
@@ -39,21 +35,3 @@ function Home(props) {
 }
 
 
-const mapStateToProps = (state) => {
-
-    return {
-           videogames: state.videogames,
-           searchQuery: state.searchVideogames,
-           orderedVideogames: state.orderedVideogames,
-           filtered: state.filtered,
-           isEmpty: state.isEmpty,
-    }
-
-}
-
-const mapDispatchToProps = (dispatch) => {
-    return bindActionCreators({queryContent, querySearchContent, filterAlpha, showGameById}, dispatch)
-}
-
-
-export default connect(mapStateToProps, mapDispatchToProps)(Home);

@@ -7,6 +7,7 @@ export const StarLogo = styled.div`
         font-family: 'JetBrains Mono';
         height: max-content;
         width: 250px;
+        margin-left: 25px;
 
         h3 {
             margin: 0 auto; 
@@ -31,5 +32,9 @@ export const StarLogo = styled.div`
                                 filter: brightness(8) contrast(4) drop-shadow(0px 0px 1px rgb(255, 0, 0, 0.5));
             
         }
+    }
+
+    @media (max-width: 850px) {
+        margin-left: 0;
     }
 `

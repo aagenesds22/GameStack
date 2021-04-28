@@ -8,7 +8,10 @@ export const InputDiv = styled.div`
         color: white;
         background-color: transparent;
         font-family: 'JetBrains Mono';
-        
+
+        div {
+            width: 100%;
+        }
 
         .formCol {
             display: flex;            
@@ -30,14 +33,28 @@ export const InputDiv = styled.div`
             background-color: rgb(255,255,255, 0.3);
         
         }
-    
+
+        .platformInput {
+            display: flex;
+            color: white; 
+            flex-wrap: wrap;
+            justify-content: space-around;
+        }
+
+        .mandatoryInput {
+            color: red;
+            font-weight: 900;
+        }
+
         .slideContainer {
             margin-bottom: 22px;
           
                
         }
 
-   
+        .genreInput {
+            color: black !important;
+        }
 
         .genreBlock {
             

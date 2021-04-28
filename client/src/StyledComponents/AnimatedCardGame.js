@@ -13,6 +13,58 @@ export const AnimatedCardGame = styled.div`
     margin-top: 3em;
     margin-bottom: 3em;
 
+    .errorMessage{
+           width: 90%;
+    }
+    .mainContainerGrid {
+       width: 100%;
+       display: inherit;
+       flex-direction: column;
+       background-color: rgb(0,0,25, 0.85);
+       padding-bottom: 4em;
+    }
+    
+    
+    .container {
+       display: flex; 
+       height: 100%
+    }
+
+    .genreDiv {
+       position: absolute;
+       font-family: 'JetBrains Mono';
+       top: 14%;
+       border: 1px solid black;
+       border-top-right-radius: 8px;
+       border-bottom-right-radius: 8px;
+       background-color: rgb(0,0,0,0.6);
+       padding-left: 4px; 
+       border-left: none;
+    }
+
+    .genreDiv span {
+       font-weight: 800;
+       color: yellow;
+    }
+
+    .genreUnorderedList {
+       list-style-type: none;
+       padding: 0;
+       display: flex;
+       flex-direction: column;
+       flex-wrap: wrap;
+       margin: 0 auto;
+    }
+
+    .genreUnorderedList li {
+       position: relative;
+       font-size: 9.9px;
+       color: white;
+       font-family: 'JetBrains Mono';
+       margin: 0 auto;
+    }
+
+   
     .link {
        width: 100%;
        height: 100%;
