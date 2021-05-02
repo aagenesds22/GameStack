@@ -1,6 +1,6 @@
 import * as React from 'react';
 import {Link} from 'react-router-dom';
-import {ReactComponent as YourSvg} from '../star_prototype_Webpage2.svg';
+import {ReactComponent as YourSvg} from '../assets/svg/star_prototype_Webpage2.svg';
 import {MainPage, StarDiv} from '../StyledComponents/Main';
 
 
