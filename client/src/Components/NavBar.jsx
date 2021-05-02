@@ -3,10 +3,10 @@ import {connect} from 'react-redux';
 import SearchBar from './SearchBar';
 import {NavigationBar, NavigationMenu} from '../StyledComponents/NavBar';
 import {Link} from 'react-router-dom';
-import {ReactComponent as Stars} from '../star_prototype_Webpage2.svg';
+import {ReactComponent as Stars} from '../assets/svg/star_prototype_Webpage2.svg';
 import {StarLogo} from '../StyledComponents/LogoNavBar';
-import {ReactComponent as HomeIcon} from '../home-icon-silhouette-svgrepo-com.svg';
-import {ReactComponent as AddIcon} from '../plus-sign-svgrepo-com.svg';
+import {ReactComponent as HomeIcon} from '../assets/svg/home-icon-silhouette-svgrepo-com.svg';
+import {ReactComponent as AddIcon} from '../assets/svg/plus-sign-svgrepo-com.svg';
 /* import {ReactComponent as InfoIcon} from '../info-svgrepo-com.svg' */
 
 
