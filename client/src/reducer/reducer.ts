@@ -1,17 +1,24 @@
-import {QUERY_CONTENT, 
-    QUERY_RESET_CONTENT,
-    QUERY_SEARCH, 
-    GET_GENRES, 
-    SHOW_GAME_BY_ID_SERVER, 
-    FILTER_ALPHA, 
-    FILTER_INVERSE_ALPHA, 
-    FILTER_RATING, 
-    FILTER_DECREASING_RATING, 
-    FILTER_GENRE,
-    FILTER_BOTH,
-    FILTER_USER_CREATOR,
-    FILTER_API_CREATOR,
-    RESET_FILTERS} from '../actions/actions';
+import {ActionTypes} from '../actions/types';
+
+
+const {
+
+    queryContent, 
+    querySearchContent, 
+    queryResetContent,
+    getGenres,
+    showGameByIdServer,
+    filterAlpha,
+    filterInverseAlpha,
+    filterIncreaseRating,
+    filterDecreasingRating,
+    filterGenre,
+    filterByCreatorApi,
+    filterByCreatorUser,
+    filterByCreatorBoth,
+    resetFilters,
+
+} = ActionTypes;
 
 
 interface Game {
@@ -24,6 +31,7 @@ interface Game {
 }
     
 
+
 export interface globalState {
     videogames: Game[];
     orderedVideogames: Game[];
@@ -35,17 +43,6 @@ export interface globalState {
     isEmpty: boolean;
     isGameIdEmpty: boolean;
 };
-
-
-/* videogames: [],
-orderedVideogames: [];
-genres: [];
-idGame: {};
-currentGenre: '';
-filtered: false;
-searched: false; 
-isEmpty: boolean;
-isGameIdEmpty: true; */
 
 
 
@@ -62,16 +59,16 @@ const rootReducer = (state:globalState = {
     isEmpty: true,
     isGameIdEmpty: true,
 
-    }, action:{type: string; payload?: any}) => {
+    }, action:{type: number; payload: any;}) => {
     switch(action.type){
 
-        case QUERY_CONTENT:
+        case queryContent:
             return {
                 ...state,
                 videogames: action.payload.data,
                 isEmpty: false,
             };
-        case QUERY_SEARCH: 
+        case querySearchContent: 
             return {
                 ...state,
                 videogames: action.payload.data,
@@ -80,7 +77,7 @@ const rootReducer = (state:globalState = {
                 currentGenre: '',
                 isEmpty: false,
             };
-        case QUERY_RESET_CONTENT:
+        case queryResetContent:
             return {
                 ...state,
                 videogames: [],
@@ -90,12 +87,12 @@ const rootReducer = (state:globalState = {
                 currentGenre: '',
 
             } 
-        case GET_GENRES: 
+        case getGenres: 
         return {
             ...state,
             genres: action.payload.data,
         };
-        case SHOW_GAME_BY_ID_SERVER:
+        case showGameByIdServer:
 
             console.log(action.payload);
 
@@ -106,7 +103,7 @@ const rootReducer = (state:globalState = {
                 idGame: action.payload === 'reset' ? {} : action.payload,
                 isGameIdEmpty: action.payload === 'reset' ? true : false,
             };
-        case FILTER_ALPHA:
+        case filterAlpha:
 
             return !state.filtered ? {
                 ...state,
@@ -120,7 +117,7 @@ const rootReducer = (state:globalState = {
                     return a.name.toLowerCase() < b.name.toLowerCase() ? -1 : a.name.toLowerCase() > b.name.toLowerCase() ? 1 : 0;
                 })
             } 
-        case FILTER_INVERSE_ALPHA: 
+        case filterInverseAlpha: 
         return !state.filtered ? {
             ...state,
             orderedVideogames: [...state.videogames].sort((a,b) => {
@@ -135,7 +132,7 @@ const rootReducer = (state:globalState = {
         }
         
          
-        case FILTER_RATING:
+        case filterIncreaseRating:
             return !state.filtered? {
                 ...state,
                 orderedVideogames: [...state.videogames].sort((a,b) => {
@@ -151,7 +148,7 @@ const rootReducer = (state:globalState = {
                 }),
             }
             
-        case FILTER_DECREASING_RATING: 
+        case filterDecreasingRating: 
         return !state.filtered ? {
             ...state,
             orderedVideogames: [...state.videogames].sort((a,b) => {
@@ -169,7 +166,7 @@ const rootReducer = (state:globalState = {
             }),
 
         }; 
-        case FILTER_GENRE:
+        case filterGenre:
 
             return !state.filtered ?
             {
@@ -199,23 +196,23 @@ const rootReducer = (state:globalState = {
                 }),
                 currentGenre: action.payload,
             }
-            case RESET_FILTERS:
+            case resetFilters:
                 return {
                     ...state,
                 filtered: false,
                 }
-            case FILTER_USER_CREATOR:
+            case filterByCreatorUser:
                 return {
                     ...state,
                     orderedVideogames: [...state.videogames].filter(elem => typeof elem.id !== 'number'),
                     filtered: true,
                 } 
-            case FILTER_BOTH:
+            case filterByCreatorBoth:
                 return {
                     ...state,
                     filtered: false,
                        };
-            case FILTER_API_CREATOR:
+            case filterByCreatorApi:
                 return {
                     ...state,
                     orderedVideogames: [...state.videogames].filter(elem => Number.isInteger(elem.id)),

@@ -11,9 +11,9 @@ import {Footer} from '../StyledComponents/Footer';
 import FilterBar from './FilterBar';
 import FilterGenreBar from './FilterGenreBar';
 import FilterCreator from './FilterCreator';
-import {ReactComponent as SpinnerSVG} from '../Spinner-1.3s-384px.svg';
-import {ReactComponent as Bars} from '../menu.svg';
-import {ReactComponent as CloseBars} from '../close.svg'
+import {ReactComponent as SpinnerSVG} from '../assets/svg/Spinner-1.3s-384px.svg';
+import {ReactComponent as Bars} from '../assets/svg/menu.svg';
+import {ReactComponent as CloseBars} from '../assets/svg/close.svg'
 import {ResponsiveBar} from '../StyledComponents/MenuBars';
 
 
