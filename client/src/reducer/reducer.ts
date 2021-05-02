@@ -14,24 +14,55 @@ import {QUERY_CONTENT,
     RESET_FILTERS} from '../actions/actions';
 
 
+interface Game {
+        id: string|number;
+        background_image: string;
+        name: string;
+        rating: number;
+        released: string;
+        genres: {name:string, id:number, createdAt?: string}[];
+}
+    
+
+export interface globalState {
+    videogames: Game[];
+    orderedVideogames: Game[];
+    genres: {name:string; id:number; createdAt?:string}[];
+    idGame: {};
+    currentGenre: string;
+    filtered:boolean;
+    searched:boolean; 
+    isEmpty: boolean;
+    isGameIdEmpty: boolean;
+};
 
 
-const initialState = {
+/* videogames: [],
+orderedVideogames: [];
+genres: [];
+idGame: {};
+currentGenre: '';
+filtered: false;
+searched: false; 
+isEmpty: boolean;
+isGameIdEmpty: true; */
+
+
+
+
+const rootReducer = (state:globalState = {
+
     videogames: [],
-    orderedVideogames: [], 
+    orderedVideogames: [],
     genres: [],
     idGame: {},
     currentGenre: '',
     filtered: false,
     searched: false, 
     isEmpty: true,
-    isGameIdEmpty: true, 
-};
+    isGameIdEmpty: true,
 
-
-
-
-const rootReducer = (state = initialState, action) => {
+    }, action:{type: string; payload?: any}) => {
     switch(action.type){
 
         case QUERY_CONTENT:
@@ -52,7 +83,7 @@ const rootReducer = (state = initialState, action) => {
         case QUERY_RESET_CONTENT:
             return {
                 ...state,
-                videogames: [...''],
+                videogames: [],
                 filtered: false,
                 searched: false,
                 isEmpty: true,
@@ -108,13 +139,15 @@ const rootReducer = (state = initialState, action) => {
             return !state.filtered? {
                 ...state,
                 orderedVideogames: [...state.videogames].sort((a,b) => {
-                    return a.rating < b.rating ? -1 : a.rating > b.rating ? 1 : 0;
+                    
+                    return a.rating - b.rating;
                 }),
                 filtered: true,
             } : {
                 ...state,
                 orderedVideogames: [...state.orderedVideogames].sort((a,b) => {
-                    return a.rating < b.rating ? -1 : a.rating > b.rating ? 1 : 0;
+                 
+                    return b.rating - a.rating;
                 }),
             }
             
@@ -122,13 +155,17 @@ const rootReducer = (state = initialState, action) => {
         return !state.filtered ? {
             ...state,
             orderedVideogames: [...state.videogames].sort((a,b) => {
-                return a.rating < b.rating ? 1 : a.rating > b.rating ? -1 : 0;
+                const dateNext = new Date(a.released).getTime();
+                    const dateBef = new Date(b.released).getTime();
+                return dateBef - dateNext;
             }),
           filtered: true,
         } : {
             ...state,
             orderedVideogames: [...state.orderedVideogames].sort((a,b) => {
-                return a.rating < b.rating ? 1 : a.rating > b.rating ? -1 : 0;
+                const dateNext = new Date(a.released).getTime();
+                    const dateBef = new Date(b.released).getTime();
+                return dateBef - dateNext;
             }),
 
         }; 
@@ -170,7 +207,7 @@ const rootReducer = (state = initialState, action) => {
             case FILTER_USER_CREATOR:
                 return {
                     ...state,
-                    orderedVideogames: [...state.videogames].filter(elem => /^[0-9a-f]{8}-[0-9a-f]{4}-[0-5][0-9a-f]{3}-[089ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(elem.id)),
+                    orderedVideogames: [...state.videogames].filter(elem => typeof elem.id !== 'number'),
                     filtered: true,
                 } 
             case FILTER_BOTH:

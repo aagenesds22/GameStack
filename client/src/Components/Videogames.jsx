@@ -1,12 +1,12 @@
-import React, {useState, useEffect, useLayoutEffect, useRef} from 'react';
+import React, {useState, useEffect, useRef} from 'react';
 import {queryContent, 
        getGenres,
        showGameById} from '../actions/actions';
-import Pagination from './Pagination.jsx';
+import Pagination from './Pagination';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
 import GameGrid from './GameGrid';
-import NavBar from './NavBar.jsx';
+import NavBar from './NavBar';
 import {Footer} from '../StyledComponents/Footer';
 import FilterBar from './FilterBar';
 import FilterGenreBar from './FilterGenreBar';
@@ -59,7 +59,7 @@ function VideogamesGrid(props) {
 
        const testRef = useRef();
 
-        useLayoutEffect(() => {
+        useEffect(() => {
               
            
               props.isEmpty && props.queryContent();

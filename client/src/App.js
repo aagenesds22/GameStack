@@ -1,10 +1,10 @@
 import React from 'react';
 import {Route} from 'react-router-dom';
 import JetBrains from './assets/fonts/jetbrains';
-import VideogamesGrid from './Components/Videogames.jsx';
-import Videogame from './Components/Videogame.jsx';
+import VideogamesGrid from './Components/Videogames';
+import Videogame from './Components/Videogame';
 import AddVideogames from './Components/AddVideogames';
-import Home from './Components/Home.jsx';
+import Home from './Components/Home';
 import './App.css';
 
 function App() {

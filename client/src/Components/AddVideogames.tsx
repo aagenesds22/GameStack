@@ -2,17 +2,31 @@ import axios from 'axios';
 import React,{useState, useEffect, useRef} from 'react';
 import NavBar from './NavBar.jsx';
 import {connect} from 'react-redux';
-import {bindActionCreators} from 'redux';
 import {getGenres, queryContent} from '../actions/actions';
-import {InputDiv} from '../StyledComponents/InputForm';
+import {InputDiv, MainContainer} from '../StyledComponents/InputPage';
 import {Footer} from '../StyledComponents/Footer';
 import {SuccessMessage} from '../StyledComponents/SucessAdd';
+import {globalState} from '../reducer/reducer';
 
 
-export function AddVideogames (props) {
+interface InputState {
+    name: string;
+    description: string;
+    releaseDate: string;
+    rating: number;
+    genres: {id: number; name: string}[];
+    platforms: string[];
+}
+
+export function AddVideogames (props:{
+    getGenres(): any;
+    queryContent(): any;
+    genres: {id: number; 
+        name:string}[]}) {
     
     const {getGenres} = props;
-    const [data, setData] = useState({
+
+    const [data, setData] = useState<InputState>({
       name: "",
       description: "",
       releaseDate: "",
@@ -38,15 +52,15 @@ export function AddVideogames (props) {
         props.genres.length < 1 && getGenres();
     })
 
-    const nameRef = useRef(null);
-    const platformRef = useRef(null);
+    const nameRef = React.useRef<HTMLInputElement>(null);
+    const platformRef = React.useRef<HTMLDivElement>(null);
     const changeWidth = () => {
         setWidth(window.innerWidth);
         return;
     }
 
 
-    const handleChange = (e) => {
+    const handleChange = (e:React.ChangeEvent<any>) => {
         setData(prevVal => {
             return {
             ...prevVal,
@@ -55,7 +69,7 @@ export function AddVideogames (props) {
         })
     }
 
-    const handleCheckbox = (e) => {
+    const handleCheckbox = (e:any) => {
         setData(prevState => {
             const exists = prevState.platforms.indexOf(e.target.value);
             return {...prevState,
@@ -68,43 +82,51 @@ export function AddVideogames (props) {
     }
 
 
-    const handleSubmit = (e) => {
+    const handleSubmit = (e:React.FormEvent<HTMLFormElement>) => {
+
         console.log(e);
 
         const {name, description, releaseDate, rating, genres, platforms} = data;
-        let savedBorder;
+
+        let savedBorder:HTMLElement|any;
+
         if(/[_+",.$#/!°]|^\s{1,}/g.test(name)) {
             e.preventDefault();
             alert('Invalid name. Special characters not allowed.')
-            savedBorder = nameRef.current.style.border;
-            nameRef.current.scrollIntoView({behavior: 'smooth'});
-            nameRef.current.style.border = '2px solid red';
-            nameRef.current.disabled=true;
-            nameRef.current.placeholder = 'Please insert a valid name'
-            nameRef.current.background = 'transparent';
+            if(nameRef.current !== null) {
+                savedBorder = nameRef.current.style.border;
+                nameRef.current.scrollIntoView({behavior: 'smooth'});
+                nameRef.current.style.border = '2px solid red';
+                nameRef.current.disabled=true;
+                nameRef.current.placeholder = 'Please insert a valid name'
+                
             setTimeout(()=> {
-                nameRef.current.disabled=false; 
-                nameRef.current.style.border = savedBorder;
-                nameRef.current.backgroundColor = 'rgb(255, 255, 255. 0.5)';
-                nameRef.current.placeholder = 'Enter a valid name...';
-                setData(prevVal => {return {
+                if(nameRef.current !== null) {
+                    nameRef.current.disabled=false; 
+                    nameRef.current.style.border = savedBorder;
+                    nameRef.current.style.backgroundColor = 'rgb(255, 255, 255. 0.5)';
+                    nameRef.current.placeholder = 'Enter a valid name...';
+                    setData(prevVal => {return {
                     ...prevVal,
                     name: '',
-                }})
-                return;}, 1500);
+                    }})
+                    }return;}, 1500);
                 console.log('yes, it has a _')
+            }
             return;
         }
 
-        if(platforms.length < 1) {
+        if(platforms.length < 1 && platformRef.current !== null) {
             e.preventDefault();
             alert("You must choose at least one game platform first!");
             savedBorder = platformRef.current.style.border;
             platformRef.current.style.border = "2px solid red";
             
             setTimeout(() => {
+                if(platformRef.current !== null) {
                 platformRef.current.style.border = savedBorder;
                 return;
+                }
             }, 1500);
             console.log('yes, you must choose a platform');
           return;
@@ -145,16 +167,12 @@ export function AddVideogames (props) {
         
     }
 
+
+
     return (
         <div style={{minHeight: '100vh', backgroundColor: 'black', height: 'max-content', display: 'flex', flexDirection: 'column', justifyContent: 'space-between'}}>
         <NavBar />
-            <div className="mainContainer" style={{
-            width: '100%',
-            height: 'max-content',
-            display: 'flex',
-            flexDirection: `${width < 800 ? 'column' : 'row'}`,
-            paddingBottom: '2em',
-            }}>
+            <MainContainer width={width}>
                 <div style={{
                         width: `${width < 800 ? '100%' : '65%'}`,
                         color: 'white',
@@ -167,7 +185,7 @@ export function AddVideogames (props) {
                             <p style={{
                                 width: '70%', 
                                 margin: '0 auto'}}>Have you got any game that you need to save or post online for reviews and sharing? You can 
-                post it right here! Just fill the form {width > '700' ? 'on your right' : 'below'}. We will store it safely in our database, carefully
+                post it right here! Just fill the form {width > 700 ? 'on your right' : 'below'}. We will store it safely in our database, carefully
                 programmed and optimized by experienced developers. In this game library, you will never loose your data.
 
             </p>
@@ -231,15 +249,16 @@ export function AddVideogames (props) {
             </label>
             <span className="mandatoryInput">*</span>
                 <select 
-                    type="text" 
+                    
                     className="normalInput genreInput"
                     required
-                    onChange={(e) => {
-                            const idNro = parseInt(e.target.value.match(/\d{1,}/g).join(''));
-                            const genreName = e.target.value.match(/\D{1,}/g).join('');
+                    onChange={(e:React.ChangeEvent<HTMLSelectElement>) => {
+                        
+                            const idNro = parseInt(e.target.value.match(/\d{1,}/g)!.join(''));
+                            const genreName = e.target.value.match(/\D{1,}/g)!.join('');
                             
+                        
                             
-                            console.log(e.target);
                             ![...data.genres.map(elem=> elem.id)]
                                                     .includes(idNro) && 
                                                                     setData(prevVal => {
@@ -253,6 +272,7 @@ export function AddVideogames (props) {
                                                                                             });
                             
                             return;
+                                                                                        
                         }}>
                             {props.genres.map((elem, index) => (
                                                     <option 
@@ -266,7 +286,8 @@ export function AddVideogames (props) {
                 <div key={index} style={{
                                         width: 'max-content',
                                         display: 'flex',
-                                        height: 'min-content'
+                                        height: 'min-content',
+                                        fontSize: '12px'
                 }}>
                     <span>{elem.name}</span>
                     <button onClick={(e) => {
@@ -293,7 +314,7 @@ export function AddVideogames (props) {
             Rating
             
             </label>
-            <span style={{marginLeft: '15px', color: 'yellow', fontWeight: '800'}}>{data.rating}</span>
+            <span style={{marginLeft: '15px', color: 'yellow', fontWeight: 800}}>{data.rating}</span>
                 <input  type="range" 
                         onChange={handleChange} 
                         value={data.rating} 
@@ -310,7 +331,7 @@ export function AddVideogames (props) {
         <label>Platforms<span className="mandatoryInput">*</span></label>
             <div className="platformInput">
                 {['macOS', 'Windows', 'PS5', 'PS4', 'PS3', 'PS2', 'XBOX', 'PS1', 'Wii', 'Nintendo64'].map((elem,index) => (
-                        <div key={index+40} style={{display: 'flex', width: '25%', justifyContent: 'center', fontSize: '15px', fontWeight: '800', margin: '6px'}}>
+                        <div key={index+40} style={{display: 'flex', width: '25%', justifyContent: 'center', fontSize: '15px', fontWeight: 800, margin: '6px'}}>
                             <label>{elem}</label>
                         <input 
                                 type="checkbox" 
@@ -335,7 +356,7 @@ export function AddVideogames (props) {
     </form>
     </InputDiv>
 
-    </div>
+    </MainContainer>
 
     <Footer />
     {addedGame && (
@@ -356,16 +377,16 @@ export function AddVideogames (props) {
 }
 
 
-const mapStateToProps = (state) => {
+const mapStateToProps = (state:globalState) => {
 
     return {
         genres: state.genres,
     }
 }
 
-const mapDispatchToProps = (dispatch) => {
+/* const mapDispatchToProps = (dispatch) => {
     return bindActionCreators({getGenres, queryContent}, dispatch)
 }
+ */
 
-
-export default connect(mapStateToProps, mapDispatchToProps)(AddVideogames);
+export default connect(mapStateToProps, {getGenres, queryContent})(AddVideogames);

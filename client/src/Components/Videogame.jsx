@@ -1,6 +1,6 @@
 import React, {useEffect} from 'react';
 import {connect} from 'react-redux';
-import {showGameByIdServer, showGameById} from '../actions/actions.js';
+import {showGameByIdServer, showGameById} from '../actions/actions';
 import { bindActionCreators } from 'redux';
 import NavBar from './NavBar';
 import {VideogameDetail} from '../StyledComponents/VideogameDetail';

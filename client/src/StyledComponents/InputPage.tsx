@@ -1,7 +1,18 @@
 import styled from 'styled-components';
 
+interface WidthInt {
+    readonly width: number;
+}
 
-export const InputDiv = styled.div`
+export const MainContainer = styled.div<WidthInt>`
+        width: 100%;
+        height: max-content;
+        display: flex;
+        flex-direction: ${props => props.width < 800 && "column"};
+        paddingBottom: 2em;
+`
+
+export const InputDiv = styled.div<WidthInt>`
         width: ${props => props.width < 800 ? '85%' : '30%'};
         height: 100%;
         margin: 0 auto;
@@ -62,7 +73,7 @@ export const InputDiv = styled.div`
             margin-top: 9px;
             border: 1px solid yellow;
             display: flex;
-            flexWrap: wrap;
+            flex-wrap: wrap;
             width: 100%;
             background-color: transparent;
             margin-bottom: 22px;

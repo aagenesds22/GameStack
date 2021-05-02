@@ -41,7 +41,7 @@ describe('Videogame routes', () => {
     ).timeout(5000);
   
     it('Trae datos correctamente de la API, 161 videojuegos inicialmente', (done) => {
-      agent.get('/videogames').then((resp) => {expect(resp.body.length).to.be.above(150);
+      agent.get('/videogames').then((resp) => {expect(resp.body.length).to.be.equal(161);
         return done();
       }
       ).catch(res => done(new Error(res))); 

@@ -7,7 +7,7 @@ import {ReactComponent as Stars} from '../star_prototype_Webpage2.svg';
 import {StarLogo} from '../StyledComponents/LogoNavBar';
 import {ReactComponent as HomeIcon} from '../home-icon-silhouette-svgrepo-com.svg';
 import {ReactComponent as AddIcon} from '../plus-sign-svgrepo-com.svg';
-import {ReactComponent as InfoIcon} from '../info-svgrepo-com.svg'
+/* import {ReactComponent as InfoIcon} from '../info-svgrepo-com.svg' */
 
 
 

@@ -1,4 +1,5 @@
 import axios from 'axios';
+import {Dispatch} from 'redux';
 
 
 const QUERY_CONTENT = 'QUERY_CONTENT', 
@@ -20,7 +21,7 @@ SHOW_GAME_BY_ID = "SHOW_GAME_BY_ID";
 /* filter options in queryContent [?] */
 
 export const queryContent = () => {
-    return function(dispatch) {
+    return function(dispatch:Dispatch) {
         return axios.get("http://localhost:3001/videogames")
           .then(response => {
             dispatch({ type: QUERY_CONTENT, payload: response });
@@ -31,7 +32,7 @@ export const queryContent = () => {
 }
 
 export const getGenres = () => {
-    return function (dispatch) {
+    return function (dispatch:Dispatch) {
         return axios.get(`http://localhost:3001/genre`).then(response => {
 
             dispatch({type: GET_GENRES, payload: response})
@@ -41,8 +42,8 @@ export const getGenres = () => {
     }
 }
 
-export const querySearchContent = (input) => {
-    return function (dispatch) {
+export const querySearchContent = (input:string) => {
+    return function (dispatch:Dispatch) {
     return axios.get(`http://localhost:3001/videogames?name=${input}`)
     .then(response => {
         dispatch({type: QUERY_SEARCH, payload: response})
@@ -57,8 +58,8 @@ export const queryResetContent = () => {
     }
 }
 
-export const showGameByIdServer = (input) => {
-    return function (dispatch) {
+export const showGameByIdServer = (input:string|number) => {
+    return function (dispatch:Dispatch) {
         return axios.get(`http://localhost:3001/videogame/${input}`)
         .then(response => {
             dispatch({type: "SHOW_GAME_BY_ID_SERVER", payload: response})
@@ -66,7 +67,7 @@ export const showGameByIdServer = (input) => {
     }
 }
 
-export const showGameById = (input) => {
+export const showGameById = (input:string|number) => {
     return {
         type: SHOW_GAME_BY_ID,
         payload: input,
@@ -97,14 +98,14 @@ export const filterDecreasingRating = () => {
     }
 }
 
-export const resetFilters = (input) => {
+export const resetFilters = (input:string) => {
     return {
         type: RESET_FILTERS,
         payload: input,
     }
 }
 
-export const filterGenre = (input) => {
+export const filterGenre = (input:string) => {
     console.log('test');
     return {
         type: FILTER_GENRE,

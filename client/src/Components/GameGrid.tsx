@@ -2,23 +2,46 @@ import React, {useEffect} from 'react';
 import {Link} from 'react-router-dom';
 import {AnimatedCardGame} from '../StyledComponents/AnimatedCardGame';
 import {ErrorPage} from '../StyledComponents/ErrorPage';
-import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
 import {queryContent, 
     getGenres,
     showGameById,
     showGameByIdServer} from '../actions/actions';
+import {globalState} from '../reducer/reducer';
+
+interface Game {
+        id: number|string;
+        background_image: string;
+        name: string;
+        genres: {name:string}[];
+}
+
+
+interface RenderizationInterface {
+    arr: Game[];
+    page: {
+        prev: number;
+        next: number;
+    };
+    filtered: boolean;
+    showGameByIdServer(input:number|string): any;
+}
+
+interface GameGridInterface extends RenderizationInterface, Game {
+    videogames: Game[];
+    orderedVideogames: Game[];
+    isEmpty: boolean;
+    queryContent(): any;
+    getGenres(): any;
+}
 
 
 
 
+function RenderedGames(props:RenderizationInterface) {
 
 
-
-function RenderedGames(props) {
-
-
-    return props.arr.length >= 1 ? ( 
+    return props.arr.length >= 1 ? <>{
 
         [...props.arr].slice(props.page.prev, props.page.next).map((elem,index) =>  (
 
@@ -45,7 +68,7 @@ function RenderedGames(props) {
         </div>
             </AnimatedCardGame>
 
-    ))) : <ErrorPage>
+    ))}</> : <ErrorPage>
                 <div className="errorMessage">
                     <img src="https://cdn.pixabay.com/photo/2019/06/08/09/14/high-4259761_1280.png"></img>
                     <h1>The filter you applied or the search you performed did not return any game. Reset the
@@ -58,7 +81,7 @@ function RenderedGames(props) {
 
 
 
-function GameGrid(props) {
+function GameGrid(props:GameGridInterface) {
 
     useEffect(() => {
         
@@ -72,19 +95,19 @@ function GameGrid(props) {
     return (
             <div className="mainContainerGrid">
                 <div style={{display: 'flex', flexWrap: 'wrap', justifyContent: 'space-around', backdropFilter: 'blur(2px)'}}>
-                    {<RenderedGames 
+                    <RenderedGames 
                             filtered={props.filtered}
                             page={props.page} 
                             showGameByIdServer={(elem)=> props.showGameByIdServer(elem)} 
                             arr={!props.filtered ? props.videogames : props.orderedVideogames} />
-                    }
+                    
             </div>
         </div>
 
    )
 }
 
-const mapStateToProps = (state) => {
+const mapStateToProps = (state:globalState) => {
     return {
         videogames: state.videogames,
         genres: state.genres,
@@ -94,11 +117,14 @@ const mapStateToProps = (state) => {
     }
 }
 
-const mapDispatchToProps = (dispatch) => {
+/* const mapDispatchToProps = (dispatch:Dispatch) => {
     return bindActionCreators({queryContent, 
         showGameById,
         showGameByIdServer,
         getGenres}, dispatch)
-}
+} */
 
-export default connect(mapStateToProps, mapDispatchToProps)(GameGrid);
+export default connect(mapStateToProps, {queryContent, 
+    getGenres,
+    showGameById,
+    showGameByIdServer})(GameGrid);
