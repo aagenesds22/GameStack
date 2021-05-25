@@ -21,7 +21,7 @@ function Videogame(props) {
     return (
         <VideogameDetail>
             <NavBar />
-                {LoadGameStandard(props)}
+                <LoadGameStandard />
             <Footer />
         </VideogameDetail>
     )

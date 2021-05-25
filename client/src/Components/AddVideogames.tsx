@@ -1,6 +1,6 @@
 import axios from 'axios';
 import React,{useState, useEffect, useRef} from 'react';
-import NavBar from './NavBar.jsx';
+import NavBar from './NavBar';
 import {connect} from 'react-redux';
 import {getGenres, queryContent} from '../actions/actions';
 import {InputDiv, MainContainer} from '../StyledComponents/InputPage';
@@ -22,9 +22,10 @@ export function AddVideogames (props:{
     getGenres(): any;
     queryContent(): any;
     genres: {id: number; 
-        name:string}[]}) {
+        name:string}[] | any;
+    }) {
     
-    const {getGenres} = props;
+    const {getGenres, queryContent} = props;
 
     const [data, setData] = useState<InputState>({
       name: "",
@@ -60,7 +61,7 @@ export function AddVideogames (props:{
     }
 
 
-    const handleChange = (e:React.ChangeEvent<any>) => {
+    const handleChange = (e:React.ChangeEvent<{name:string, value:string}>) => {
         setData(prevVal => {
             return {
             ...prevVal,
@@ -111,7 +112,7 @@ export function AddVideogames (props:{
                     name: '',
                     }})
                     }return;}, 1500);
-                console.log('yes, it has a _')
+                
             }
             return;
         }
@@ -128,7 +129,7 @@ export function AddVideogames (props:{
                 return;
                 }
             }, 1500);
-            console.log('yes, you must choose a platform');
+            
           return;
         }
 
@@ -274,7 +275,7 @@ export function AddVideogames (props:{
                             return;
                                                                                         
                         }}>
-                            {props.genres.map((elem, index) => (
+                            {props.genres.map((elem:{id:number; name:string;}, index:number) => (
                                                     <option 
                                                             key={index} 
                                                             value={`${elem.name}${elem.id}`}>{elem.name}
@@ -366,7 +367,7 @@ export function AddVideogames (props:{
                 <div className="messageContainer">
                     <button onClick={()=> {
                         setAddedGame(false)
-                        props.queryContent()
+                        queryContent()
                         return;}}>X</button>
                     <h3>{data.name} successfully added!</h3>
                 </div>
@@ -377,7 +378,8 @@ export function AddVideogames (props:{
 }
 
 
-const mapStateToProps = (state:globalState) => {
+
+const mapStateToProps = (state:Partial<globalState>) => {
 
     return {
         genres: state.genres,

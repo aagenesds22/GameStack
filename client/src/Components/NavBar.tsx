@@ -1,6 +1,7 @@
 import React from 'react';
 import {connect} from 'react-redux';
 import SearchBar from './SearchBar';
+import {globalState} from '../reducer/reducer';
 import {NavigationBar, NavigationMenu} from '../StyledComponents/NavBar';
 import {Link} from 'react-router-dom';
 import {ReactComponent as Stars} from '../assets/svg/star_prototype_Webpage2.svg';
@@ -11,7 +12,9 @@ import {ReactComponent as AddIcon} from '../assets/svg/plus-sign-svgrepo-com.svg
 
 
 
-function NavBar (props) {
+function NavBar (props:{
+    searchBar?: JSX.Element;
+}) {
 
     
     return (
@@ -64,18 +67,14 @@ function NavBar (props) {
     )
 }
 
-const mapStateToProps = (state) => {
+/* const mapStateToProps = (state:Partial<globalState>) => {
 
     return {
         videogames: state.videogames,
-        searchQuery: state.searchVideogames,
         orderedVideogames: state.orderedVideogames,
-        genres: state.genres,
-        isEmpty: state.isEmpty,
-        searched: state.searched,
  }
 }
+ */
 
 
-
-export default connect(mapStateToProps, null)(NavBar);
+export default connect(null, null)(NavBar);

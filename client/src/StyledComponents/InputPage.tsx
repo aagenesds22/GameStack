@@ -12,6 +12,8 @@ export const MainContainer = styled.div<WidthInt>`
         paddingBottom: 2em;
 `
 
+
+
 export const InputDiv = styled.div<WidthInt>`
         width: ${props => props.width < 800 ? '85%' : '30%'};
         height: 100%;

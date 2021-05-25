@@ -5,7 +5,7 @@ import {MainPage, StarDiv} from '../StyledComponents/Main';
 
 
 
-export default function Home(props:object): JSX.Element {
+export default function Home(): JSX.Element {
 
 
     return (
@@ -26,6 +26,7 @@ export default function Home(props:object): JSX.Element {
             <h1>GameStack</h1>
             <p>Query your favorite game. Save your old games here!</p>
             <Link to='/home' className="link">
+                
               <span className="hoverButton">Enter here</span>
               
             </Link>

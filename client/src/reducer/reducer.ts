@@ -27,7 +27,10 @@ interface Game {
         name: string;
         rating: number;
         released: string;
-        genres: {name:string, id:number, createdAt?: string}[];
+        genres: {
+            name:string, 
+            id:number, 
+            createdAt?: string}[];
 }
     
 
@@ -35,7 +38,7 @@ interface Game {
 export interface globalState {
     videogames: Game[];
     orderedVideogames: Game[];
-    genres: {name:string; id:number; createdAt?:string}[];
+    genres: {name:string; id:number;}[];
     idGame: {};
     currentGenre: string;
     filtered:boolean;

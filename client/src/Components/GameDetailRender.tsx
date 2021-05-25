@@ -1,23 +1,43 @@
-import React from 'react';
+import React, { JSXElementConstructor, ReactComponentElement, ReactElement } from 'react';
+import {connect} from 'react-redux';
+import {globalState} from '../reducer/reducer';
 
-
-export default function LoadGameStandard(props) {
+function LoadGameStandard(props:{
+    idGame: {
+        data: {
+            name:string;
+            genres:{id: number; name: string}[];
+            background_image:string;
+            description:string;
+            released:string;
+            rating:number;
+            platforms:[];
+        }
+    }}):JSX.Element {
 
     
-    return props.idGame === 'empty' ? (
-                        <div style={{width: '100%', height: '100vh', backgroundColor: 'black'}}>
-                                <h1 style={{margin: '0 auto', color: 'white'}}>Unable to find game ID.</h1>
-                                <img style={{width: '20%', height: '40%'}} src="http://assets.stickpng.com/images/5a81af7d9123fa7bcc9b0793.png"/>
+    return !props.idGame.hasOwnProperty('data') ? (
+                        <div style={{
+                                    width: '100%', 
+                                    height: '100vh', 
+                                    backgroundColor: 'black'}}>
+                                <h1 style={{
+                                    margin: '0 auto', 
+                                    color: 'white'}}>Unable to find game ID.</h1>
+                                <img style={{
+                                    width: '20%', 
+                                    height: '40%'}} 
+                                    src="http://assets.stickpng.com/images/5a81af7d9123fa7bcc9b0793.png"/>
 
                         </div>) : 
                         
-                        props.idGame.hasOwnProperty('headers') && (
+                         (
                             <div className="mainContainerDetail">
                                 
                                     <div className="gameContainerDetail">
                                         <div className="gameImgDiv">
                                             <div>
-                                            <h1 >{props.idGame.data.name}</h1>
+                                            <h1>{props.idGame.data['name']}</h1>
                                             <img src={`${props.idGame.data['background_image']}`} />
                                             </div>
                                       
@@ -29,7 +49,7 @@ export default function LoadGameStandard(props) {
                                                 <div>
                                                     <h4 style={{color: 'yellow'}}>GENRES:</h4>
                                                     <ul>
-                                                        {props.idGame.data.genres.map(elem => (
+                                                        {props.idGame.data.genres.map((elem:{id: number, name: string}) => (
                                                             <li style={{width: 'max-content'}}>{elem.name}</li>
                                                         ))}
                                                     </ul>
@@ -42,3 +62,12 @@ export default function LoadGameStandard(props) {
     ) 
 
 }
+
+
+const mapStateToProps = (state:Partial<globalState>) => {
+    return {
+        idGame: state.idGame,
+    }
+}
+
+export default connect(mapStateToProps, null)(LoadGameStandard)
