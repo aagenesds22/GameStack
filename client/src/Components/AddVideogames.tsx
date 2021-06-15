@@ -70,13 +70,15 @@ export function AddVideogames (props:{
         })
     }
 
-    const handleCheckbox = (e:any) => {
+    const handleCheckbox = (e:React.ChangeEvent) => {
+        
         setData(prevState => {
-            const exists = prevState.platforms.indexOf(e.target.value);
+            const target = e.target as HTMLInputElement
+            const exists = prevState.platforms.indexOf(target.value);
             return {...prevState,
-            platforms: prevState.platforms.includes(e.target.value) ? 
+            platforms: prevState.platforms.includes(target.value) ? 
                             prevState.platforms.slice(0, exists).concat(prevState.platforms.slice(exists+1)) :
-                                [...prevState.platforms, e.target.value],
+                                [...prevState.platforms, target.value],
             }
         })
         return;
@@ -89,7 +91,7 @@ export function AddVideogames (props:{
 
         const {name, description, releaseDate, rating, genres, platforms} = data;
 
-        let savedBorder:HTMLElement|any;
+        let savedBorder:string;
 
         if(/[_+",.$#/!°]|^\s{1,}/g.test(name)) {
             e.preventDefault();

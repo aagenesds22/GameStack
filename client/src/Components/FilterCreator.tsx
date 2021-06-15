@@ -2,11 +2,18 @@ import React, {useState, useEffect} from 'react';
 /* import {BarStyled} from '../StyledComponents/FilterBar'; */
 import {CreatorBar} from'../StyledComponents/FilterBar';
 import {connect} from 'react-redux';
-import {bindActionCreators} from 'redux';
+import {bindActionCreators, Dispatch} from 'redux';
 import {filterByCreatorBoth, filterByCreatorApi, filterByCreatorUser} from '../actions/actions';
+import {Game, globalState} from '../reducer/reducer';
 
 
-function FilterCreator(props) {
+interface FilterCreator extends Pick<globalState, "filtered"> {
+        filterByCreatorUser: ()=>void ;
+        filterByCreatorApi: ()=>void;
+        filterByCreatorBoth: ()=>void;
+}
+
+function FilterCreator(props:FilterCreator) {
 
     const [creator, setCreator] = useState({
                                         createdByUser: false,
@@ -74,7 +81,7 @@ function FilterCreator(props) {
     )
 }
 
-const mapStateToProps = (state) => {
+const mapStateToProps = (state:Pick<globalState, "filtered" | "videogames" | "orderedVideogames">) => {
     return {
         filtered: state.filtered,
         videogames: state.videogames,
@@ -83,9 +90,4 @@ const mapStateToProps = (state) => {
 }
 
 
-const mapDispatchToProps = (dispatch) => {
-
-    return bindActionCreators({filterByCreatorBoth, filterByCreatorApi, filterByCreatorUser}, dispatch)
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(FilterCreator);
+export default connect(mapStateToProps, {filterByCreatorBoth, filterByCreatorApi, filterByCreatorUser})(FilterCreator);

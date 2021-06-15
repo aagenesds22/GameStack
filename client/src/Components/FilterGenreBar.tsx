@@ -1,11 +1,18 @@
 import React, {useState} from 'react';
 import {connect} from 'react-redux';
-import {bindActionCreators} from 'redux';
+import {bindActionCreators, Dispatch} from 'redux';
 import {filterGenre, resetFilters} from '../actions/actions';
 import {BarStyled} from '../StyledComponents/FilterBar';
+import {Game, globalState} from '../reducer/reducer';
 
+interface FilterGenre extends Pick<globalState, "genres"> {
+    
+    filterGenre: (genre:string)=>void;
+    resetFilters:(input:string)=>void;
+    
+}
 
-function FilterGenreBar (props) {
+function FilterGenreBar (props:FilterGenre) {
 
     const [selectedGenre, setSelectedGenre] = useState("None");
     
@@ -16,7 +23,7 @@ function FilterGenreBar (props) {
             onSubmit={(e) => {
                         e.preventDefault();
                         selectedGenre !== 'None' ? props.filterGenre(selectedGenre) :
-                                                      props.resetFilters();
+                                                      props.resetFilters('reset');
                         return;
             }}>
          <select 
@@ -25,21 +32,20 @@ function FilterGenreBar (props) {
                 className="deployable"
                 onChange={(e)=> setSelectedGenre(e.target.value)}>
                     
-                        {['None',...props.genres].map((elem,index) => !elem.name ? (
+                        {['None',...props.genres].map((elem,index) => !elem.hasOwnProperty('name') ? (
                 
                          <option 
                                 key={index} 
-                                value={elem} 
-                                selected={!props.genreFiltered && "selected"}>
+                                value={typeof elem === 'string' ? elem : ''} >
 
                                 {elem}
                 </option>) : 
                 
                 (<option 
                 key={index} 
-                value={elem.name}>
+                value={typeof elem === 'object' ? elem.name : ''}>
 
-                       {elem.name}
+                    {typeof elem === 'object' ? elem.name : ''}
 
                 </option>))}
          </select>
@@ -49,16 +55,12 @@ function FilterGenreBar (props) {
 }
 
 
-const mapStateToProps = (state) => {
+const mapStateToProps = (state:Pick<globalState, "genres">) => {
     return {
-        genreFiltered: state.genreFiltered,
         genres: state.genres,
     }
 }
 
-const mapDispatchToProps = (dispatch) => {
-    return bindActionCreators({filterGenre, resetFilters}, dispatch);
-}
 
 
-export default connect(mapStateToProps, mapDispatchToProps)(FilterGenreBar);
+export default connect(mapStateToProps, {filterGenre, resetFilters})(FilterGenreBar);

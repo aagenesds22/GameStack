@@ -1,6 +1,6 @@
 import React, {useState} from 'react';
 import {connect} from 'react-redux';
-import {bindActionCreators} from 'redux';
+import {bindActionCreators, Dispatch} from 'redux';
 import {resetFilters, 
     filterAlpha, 
     filterInverseAlpha, 
@@ -10,7 +10,15 @@ import {resetFilters,
 import {BarStyled} from '../StyledComponents/FilterBar';
 
 
-function FilterBar (props) {
+interface Filter {
+    filterAlpha: ()=> void;
+    filterInverseAlpha: ()=>void;
+    filterIncreaseRating: ()=>void;
+    filterDecreasingRating: ()=>void;
+}
+
+
+function FilterBar (props:Filter) {
 
     const [dropSelect, setDropSelect] = useState("A-Z")
 
@@ -23,12 +31,14 @@ function FilterBar (props) {
                 onSubmit={(e) => {
                     e.preventDefault();
 
-                    const objAction = {
+                    const objAction:{
+                        [key:string]: ()=>void;
+                    } = {
 
                         'A-Z': ()=>props.filterAlpha(),
                         'Z-A': ()=>props.filterInverseAlpha(),
-                        'Rating increasing': ()=> props.filterIncreaseRating(e.target.value),
-                        'Rating decreasing': ()=> props.filterDecreasingRating(e.target.value)
+                        'Rating increasing': ()=> props.filterIncreaseRating(),
+                        'Rating decreasing': ()=> props.filterDecreasingRating()
                     }
              
                         objAction[dropSelect]();
@@ -60,8 +70,14 @@ function FilterBar (props) {
 }
 
 
-const mapDispatchToProps = (dispatch) => {
-    return bindActionCreators({filterAlpha, resetFilters, filterDecreasingRating,filterIncreaseRating,filterGenre, filterInverseAlpha}, dispatch)
+const mapDispatchToProps = (dispatch:Dispatch) => {
+    return bindActionCreators({
+        filterAlpha, 
+        resetFilters, 
+        filterDecreasingRating,
+        filterIncreaseRating,
+        filterGenre, 
+        filterInverseAlpha}, dispatch)
 }
 
 export default connect(null, mapDispatchToProps)(FilterBar);

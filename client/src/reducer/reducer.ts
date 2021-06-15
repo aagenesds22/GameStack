@@ -21,7 +21,7 @@ const {
 } = ActionTypes;
 
 
-interface Game {
+export interface Game {
         id: string|number;
         background_image: string;
         name: string;
@@ -30,7 +30,7 @@ interface Game {
         genres: {
             name:string, 
             id:number, 
-            createdAt?: string}[];
+            createdAt: string}[];
 }
     
 
@@ -39,7 +39,15 @@ export interface globalState {
     videogames: Game[];
     orderedVideogames: Game[];
     genres: {name:string; id:number;}[];
-    idGame: {};
+    idGame: {data?: {
+        name:string;
+        genres:{id: number; name: string}[];
+        background_image:string;
+        description:string;
+        released:string;
+        rating:number;
+        platforms:[];
+    }};
     currentGenre: string;
     filtered:boolean;
     searched:boolean; 

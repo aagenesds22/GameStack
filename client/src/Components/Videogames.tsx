@@ -11,42 +11,18 @@ import {Footer} from '../StyledComponents/Footer';
 import FilterBar from './FilterBar';
 import FilterGenreBar from './FilterGenreBar';
 import FilterCreator from './FilterCreator';
+import MenuBars from './MenuResponsive';
 import {ReactComponent as SpinnerSVG} from '../assets/svg/Spinner-1.3s-384px.svg';
-import {ReactComponent as Bars} from '../assets/svg/menu.svg';
-import {ReactComponent as CloseBars} from '../assets/svg/close.svg'
-import {ResponsiveBar} from '../StyledComponents/MenuBars';
+import { globalState } from '../reducer/reducer';
 
 
-
-function MenuBars({page, setPage}) {
-       const [deployed, setDeployed] = useState(false);
-       return (
-              <ResponsiveBar>
-                     {!deployed ? 
-                     <div className="childContainer" onClick={() => setDeployed(true)}>
-                            <span>FILTERS</span>
-                            <Bars style={{fill: 'yellow', height: '30px'}}/>
-                            
-                     </div> : <div className="childContainer" onClick={()=> setDeployed(false)}>
-                                   <span>CLOSE FILTERS</span>
-                                   <CloseBars style={{height: '25px', width: '40px', fill: 'yellow'}}/>
-                                   </div>}
-                     {deployed && <div className="filterContainer">
-                                          <FilterGenreBar />
-                                          <FilterCreator />
-                                          <FilterBar />
-                                   </div>}
-                     <GameGrid page={page}/>
-                     <Pagination page={page} pageSet={setPage}/>
-              </ResponsiveBar>
-       )
+interface Grid extends Pick<globalState, "genres" | "isEmpty" | "searched"> {
+       queryContent: ()=>void;
+       getGenres: ()=>void;
 }
 
 
-
-
-
-function VideogamesGrid(props) {
+function VideogamesGrid(props:Grid) {
 
        
 
@@ -56,8 +32,6 @@ function VideogamesGrid(props) {
        })
 
        const [width, setWidth] = useState(window.innerWidth);
-
-       const testRef = useRef();
 
         useEffect(() => {
               
@@ -95,17 +69,12 @@ function VideogamesGrid(props) {
                      backgroundColor: 'rgb(0,0,0, 0.9)'}}>
               
               <NavBar 
-                     paginationState={page} 
-                     paginationComponent={true} 
-                     searchBar={true}
-                     paginationFunction={(elem)=> setPage(elem)}/>
 
-
-
+                     searchBar={true} />
               {/* <SearchBar /> */}
               {props.isEmpty ? <div style={{height: '100vh'}}><SpinnerSVG style={{backgroundColor: 'transparent', width: '100%'}} /></div> : 
               
-              (<div ref={testRef} style={{
+              (<div style={{
 
                      width: '100%',
                      minHeight: '100vh', 
@@ -121,13 +90,13 @@ function VideogamesGrid(props) {
                             
                             <div style={{width:'100%', display: 'flex', flexDirection: 'column'}}>
                             
-                            <div style={{
-                            display: 'flex',
-                            alignItems: 'center',
-                            width: '100%',
-                            height: '1.6em',
-                            justifyContent: 'space-around'
-                     }}>
+                                   <div style={{
+                                   display: 'flex',
+                                   alignItems: 'center',
+                                   width: '100%',
+                                   height: '1.6em',
+                                   justifyContent: 'space-around'
+                            }}>
                      
                                    <FilterGenreBar />
                                    <FilterCreator />
@@ -148,7 +117,7 @@ function VideogamesGrid(props) {
 }
 
 
-const mapStateToProps = (state) => {
+const mapStateToProps = (state:globalState) => {
 
        return {
               videogames: state.videogames,
@@ -160,9 +129,8 @@ const mapStateToProps = (state) => {
 
 }
 
-const mapDispatchToProps = (dispatch) => {
-       return bindActionCreators({queryContent, getGenres, showGameById}, dispatch)
-}
 
-
-export default connect(mapStateToProps, mapDispatchToProps)(VideogamesGrid);
+export default connect(mapStateToProps, {
+       queryContent, 
+       getGenres, 
+       showGameById})(VideogamesGrid);

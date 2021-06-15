@@ -61,7 +61,7 @@ export const showGameById = (input:string|number) => {
 
 export const filterAlpha = () => {
     return {
-        type: ActionTypes.showGameByIdServer,
+        type: ActionTypes.filterAlpha,
     }
 }
 

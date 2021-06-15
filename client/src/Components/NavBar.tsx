@@ -13,7 +13,8 @@ import {ReactComponent as AddIcon} from '../assets/svg/plus-sign-svgrepo-com.svg
 
 
 function NavBar (props:{
-    searchBar?: JSX.Element;
+    searchBar?: JSX.Element | boolean;
+    
 }) {
 
     

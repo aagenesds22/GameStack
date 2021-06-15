@@ -17,30 +17,35 @@ interface Game {
 }
 
 
-interface RenderizationInterface {
-    arr: Game[];
+interface Page {
     page: {
         prev: number;
         next: number;
     };
+}
+
+
+interface RenderizationInterface extends Page {
+    arr: Game[];    
     filtered: boolean;
     showGameByIdServer(input:number|string): any;
 }
 
-interface GameGridInterface extends RenderizationInterface, Game {
+
+interface GameGridInterface extends RenderizationInterface, Game, Page {
     videogames: Game[];
     orderedVideogames: Game[];
     isEmpty: boolean;
-    queryContent(): any;
-    getGenres(): any;
+    queryContent: ()=>any;
+    getGenres: ()=>any;
 }
 
 
 
 
-function RenderedGames(props:RenderizationInterface) {
+function RenderedGames(props:Partial<RenderizationInterface>) {
 
-
+    if(props.arr && props.page && props.showGameByIdServer) {
     return props.arr.length >= 1 ? <>{
 
         [...props.arr].slice(props.page.prev, props.page.next).map((elem,index) =>  (
@@ -49,7 +54,7 @@ function RenderedGames(props:RenderizationInterface) {
 
         <div className="container">
             <Link 
-                 onClick={(e) => {props.showGameByIdServer(elem.id)}} 
+                 onClick={(e) => {if(props.showGameByIdServer)props.showGameByIdServer(elem.id)}} 
                  to={`/game/${elem.id}`} 
                  className='link'>
 
@@ -59,7 +64,7 @@ function RenderedGames(props:RenderizationInterface) {
         </div>
         <div className="genreDiv">
             <span>Genres:</span> 
-                <ul className="genreUnorderedList">{elem.genres.map((elem,index) => (
+                <ul className="genreUnorderedList">{elem.genres.map((elem:{name:string},index:number) => (
                     
                     <li key={index+9}>{elem.name}</li>
                 
@@ -76,17 +81,24 @@ function RenderedGames(props:RenderizationInterface) {
                     </h1>
                 </div>
         </ErrorPage>
+    }
+
+    return <> 
+            <ErrorPage />
+    </>
 }
 
 
 
 
-function GameGrid(props:GameGridInterface) {
+function GameGrid(props:Partial<GameGridInterface>) {
 
     useEffect(() => {
         
+        if(props.hasOwnProperty('queryContent') && props.queryContent && props.getGenres) {
         props.isEmpty && props.queryContent();
-        props.genres.length < 1 && props.getGenres();
+        props.genres!.length < 1 && props.getGenres();
+        }
         
         return;
     }, [])
@@ -95,12 +107,13 @@ function GameGrid(props:GameGridInterface) {
     return (
             <div className="mainContainerGrid">
                 <div style={{display: 'flex', flexWrap: 'wrap', justifyContent: 'space-around', backdropFilter: 'blur(2px)'}}>
+                    {
                     <RenderedGames 
                             filtered={props.filtered}
                             page={props.page} 
-                            showGameByIdServer={(elem)=> props.showGameByIdServer(elem)} 
+                            showGameByIdServer={(elem)=> {if(props.showGameByIdServer) props.showGameByIdServer(elem)}} 
                             arr={!props.filtered ? props.videogames : props.orderedVideogames} />
-                    
+                    }
             </div>
         </div>
 

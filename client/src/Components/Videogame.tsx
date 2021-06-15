@@ -1,27 +1,41 @@
 import React, {useEffect} from 'react';
-import {connect} from 'react-redux';
+import {connect, ConnectedProps} from 'react-redux';
 import {showGameByIdServer, showGameById} from '../actions/actions';
-import { bindActionCreators } from 'redux';
+import { bindActionCreators, Dispatch } from 'redux';
 import NavBar from './NavBar';
+import { RouteComponentProps } from 'react-router';
 import {VideogameDetail} from '../StyledComponents/VideogameDetail';
 import {Footer} from '../StyledComponents/Footer';
-import LoadGameStandard from './GameDetailRender';
+import LoadGame from './GameDetailRender';
+import {globalState} from '../reducer/reducer';
 
 
-function Videogame(props) {
+
+
+interface MatchParams {
+    id: string;
+}
+
+interface videoGame extends Partial<globalState>, RouteComponentProps<MatchParams> {
+    showGameByIdServer(arg:string): any;
+    
+    
+}
+
+function Videogame(props:videoGame):JSX.Element {
     
 
     useEffect(() => {
               
         props.isGameIdEmpty && props.showGameByIdServer(props.match.params.id);
-
-        return null;
+        return;
+        
   }, []) 
 
     return (
         <VideogameDetail>
             <NavBar />
-                <LoadGameStandard />
+                <LoadGame />
             <Footer />
         </VideogameDetail>
     )
@@ -29,7 +43,7 @@ function Videogame(props) {
 
 
 
-const mapStateToProps = (state) => {
+const mapStateToProps = (state:Partial<globalState>) => {
     return {
         videogames: state.videogames,
         idGame: state.idGame,
@@ -37,8 +51,8 @@ const mapStateToProps = (state) => {
     }
 }
 
-const mapDispatchToProps = (dispatch) => {
+const mapDispatchToProps = (dispatch:Dispatch) => {
     return bindActionCreators({showGameByIdServer, showGameById}, dispatch)
-}
+} 
 
 export default connect(mapStateToProps, mapDispatchToProps)(Videogame);
